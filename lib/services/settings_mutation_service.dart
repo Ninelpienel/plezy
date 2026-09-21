@@ -11,6 +11,8 @@ import '../utils/platform_detector.dart';
 import 'device_performance.dart';
 import 'discord_rpc_service.dart';
 import 'companion_remote/companion_remote_host_controller.dart';
+import 'fullscreen_state_manager.dart';
+import 'htpc_mode.dart';
 import 'music/music_playback_service.dart';
 import 'settings_service.dart';
 import 'trackers/anilist/anilist_tracker.dart';
@@ -45,9 +47,14 @@ class SettingsMutationService {
     _SettingsEffect(SettingsService.appLocale, _applyAppLocale, rebuildsRoot: true),
     _SettingsEffect(
       SettingsService.forceTvMode,
-      (_, settings, _) async => TvDetectionService.setForceTVSync(settings.read(SettingsService.forceTvMode)),
+      (_, settings, _) async => TvDetectionService.setForceTVSync(HtpcMode.forcesTvLayout(settings)),
       rebuildsRoot: true,
     ),
+    _SettingsEffect(SettingsService.htpcMode, (_, settings, _) async {
+      TvDetectionService.setForceTVSync(HtpcMode.forcesTvLayout(settings));
+      // Switching it on should look like it: the living room is fullscreen.
+      if (HtpcMode.isActive) await FullscreenStateManager().enterFullscreen();
+    }, rebuildsRoot: true),
     _SettingsEffect(
       SettingsService.visualEffects,
       (_, settings, _) async => DevicePerformance.setOverrideSync(settings.read(SettingsService.visualEffects)),

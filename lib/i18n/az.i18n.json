@@ -368,6 +368,11 @@
     "forceTvModeDescription": "TV interfeysini məcburi et. Avtomatik təyin etməyən cihazlar üçündür.",
     "startInFullscreen": "Tam ekranda başlat",
     "startInFullscreenDescription": "Plezy-ni açılışda tam ekran rejimində aç",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Oynadıcı bağlandıqda tam ekrandan çıx",
     "exitFullscreenOnPlayerCloseDescription": "Video oynadıcını bağlayarkən avtomatik tam ekrandan çıx",
     "autoHidePerformanceOverlay": "Məhsuldarlıq paneli avtomatik gizlənsin",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "Server başqa hosta yönləndirdi. Son ${product} URL-ni birbaşa daxil edin.",
     "redirectInsecure": "Server HTTPS-dən təhlükəsiz olmayan URL-ə yönləndirdi",
     "redirectUnsupportedEnterFinal": "Server dəstəklənməyən URL-ə yönləndirdi. Son ${product} URL-ni birbaşa daxil edin."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

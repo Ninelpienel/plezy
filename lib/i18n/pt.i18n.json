@@ -368,6 +368,11 @@
     "forceTvModeDescription": "Forçar o layout de TV em dispositivos sem detecção automática. Requer reiniciar o app.",
     "startInFullscreen": "Iniciar em tela cheia",
     "startInFullscreenDescription": "Abrir o Plezy em modo de tela cheia ao iniciar",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Sair da tela cheia ao fechar o reprodutor",
     "exitFullscreenOnPlayerCloseDescription": "Sair automaticamente da tela cheia ao fechar o reprodutor de vídeo",
     "autoHidePerformanceOverlay": "Ocultar automaticamente o painel de desempenho",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "O servidor redirecionou para outro host. Insira diretamente a URL final do ${product}.",
     "redirectInsecure": "O servidor redirecionou de HTTPS para uma URL insegura",
     "redirectUnsupportedEnterFinal": "O servidor redirecionou para uma URL não compatível. Insira diretamente a URL final do ${product}."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

@@ -368,6 +368,11 @@
     "forceTvModeDescription": "強制使用 TV 介面版面。適用於無法自動辨識 TV 的裝置。需要重新啟動。",
     "startInFullscreen": "以全螢幕模式啟動",
     "startInFullscreenDescription": "啟動時直接以全螢幕開啟 Plezy",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "關閉播放器時退出全螢幕",
     "exitFullscreenOnPlayerCloseDescription": "關閉影片播放器時自動退出全螢幕模式",
     "autoHidePerformanceOverlay": "自動隱藏效能疊加層",
@@ -2234,5 +2239,12 @@
     "redirectDifferentHost": "伺服器重新導向至不同的主機。請直接輸入最終的 ${product} URL。",
     "redirectInsecure": "伺服器從 HTTPS 重新導向至不安全的 URL",
     "redirectUnsupportedEnterFinal": "伺服器重新導向至不支援的 URL。請直接輸入最終的 ${product} URL。"
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

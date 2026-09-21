@@ -368,6 +368,11 @@
     "forceTvModeDescription": "Wymuś układ telewizyjny na urządzeniach, które nie wykrywają go automatycznie. Wymaga ponownego uruchomienia.",
     "startInFullscreen": "Uruchom na pełnym ekranie",
     "startInFullscreenDescription": "Otwiera Plezy w trybie pełnoekranowym przy uruchomieniu",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Wyjdź z pełnego ekranu przy zamykaniu odtwarzacza",
     "exitFullscreenOnPlayerCloseDescription": "Automatycznie wychodzi z trybu pełnoekranowego po zamknięciu odtwarzacza wideo",
     "autoHidePerformanceOverlay": "Automatycznie ukrywaj nakładkę wydajności",
@@ -2267,5 +2272,12 @@
     "redirectDifferentHost": "Serwer przekierował do innego hosta. Wprowadź bezpośrednio docelowy adres URL serwera ${product}.",
     "redirectInsecure": "Serwer przekierował z HTTPS do niezabezpieczonego adresu URL",
     "redirectUnsupportedEnterFinal": "Serwer przekierował do nieobsługiwanego adresu URL. Wprowadź bezpośrednio docelowy adres URL serwera ${product}."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

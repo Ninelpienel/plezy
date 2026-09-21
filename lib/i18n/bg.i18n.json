@@ -368,6 +368,11 @@
     "forceTvModeDescription": "Принуди ТВ оформление. За устройства, които не се разпознават автоматично. Изисква рестарт.",
     "startInFullscreen": "Стартирай на цял екран",
     "startInFullscreenDescription": "Отваряй Plezy в режим цял екран при стартиране",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Изход от цял екран при затваряне на плейъра",
     "exitFullscreenOnPlayerCloseDescription": "Автоматично излиза от режим цял екран при затваряне на видео плейъра",
     "autoHidePerformanceOverlay": "Автоматично скриване на оверлея за производителност",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "Сървърът пренасочи към друг хост. Въведете директно крайния URL на ${product}.",
     "redirectInsecure": "Сървърът пренасочи от HTTPS към незащитен URL",
     "redirectUnsupportedEnterFinal": "Сървърът пренасочи към неподдържан URL. Въведете директно крайния URL на ${product}."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

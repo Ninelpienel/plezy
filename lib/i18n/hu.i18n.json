@@ -368,6 +368,11 @@
     "forceTvModeDescription": "TV-elrendezés kényszerítése az automatikus felismeréssel nem rendelkező eszközökön. Újraindítást igényel.",
     "startInFullscreen": "Indítás teljes képernyőn",
     "startInFullscreenDescription": "A Plezy megnyitása teljes képernyős módban indításkor",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Kilépés a teljes képernyőből a lejátszó bezárásakor",
     "exitFullscreenOnPlayerCloseDescription": "Automatikus kilépés a teljes képernyőből a videólejátszó bezárásakor",
     "autoHidePerformanceOverlay": "Teljesítményadatok automatikus elrejtése",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "A szerver egy másik gazdagépre irányított át. Add meg közvetlenül a végleges ${product} URL-t.",
     "redirectInsecure": "A szerver HTTPS-ről nem biztonságos URL-re irányított át",
     "redirectUnsupportedEnterFinal": "A szerver nem támogatott URL-re irányított át. Add meg közvetlenül a végleges ${product} URL-t."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

@@ -368,6 +368,11 @@
     "forceTvModeDescription": "Dwing de tv-indeling af op apparaten zonder automatische detectie. Herstart vereist.",
     "startInFullscreen": "Starten in volledig scherm",
     "startInFullscreenDescription": "Open Plezy bij het starten in volledig scherm",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Volledig scherm verlaten bij sluiten van speler",
     "exitFullscreenOnPlayerCloseDescription": "Verlaat automatisch de volledigschermmodus wanneer de videospeler wordt gesloten",
     "autoHidePerformanceOverlay": "Prestatie-overlay automatisch verbergen",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "De server heeft doorgestuurd naar een andere host. Voer de uiteindelijke ${product}-URL rechtstreeks in.",
     "redirectInsecure": "De server heeft van HTTPS doorgestuurd naar een onbeveiligde URL",
     "redirectUnsupportedEnterFinal": "De server heeft doorgestuurd naar een niet-ondersteunde URL. Voer de uiteindelijke ${product}-URL rechtstreeks in."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

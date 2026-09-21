@@ -368,6 +368,11 @@
     "forceTvModeDescription": "Принудительно включить ТВ-интерфейс. Для устройств без автоопределения. Требуется перезапуск.",
     "startInFullscreen": "Запускать в полноэкранном режиме",
     "startInFullscreenDescription": "Открывать Plezy в полноэкранном режиме при запуске",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Выходить из полноэкранного режима при закрытии плеера",
     "exitFullscreenOnPlayerCloseDescription": "Автоматически выходить из полноэкранного режима при закрытии видеоплеера",
     "autoHidePerformanceOverlay": "Автоскрытие оверлея производительности",
@@ -2267,5 +2272,12 @@
     "redirectDifferentHost": "Сервер перенаправил на другой хост. Введите конечный URL ${product} напрямую.",
     "redirectInsecure": "Сервер перенаправил с HTTPS на небезопасный URL",
     "redirectUnsupportedEnterFinal": "Сервер перенаправил на неподдерживаемый URL. Введите конечный URL ${product} напрямую."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

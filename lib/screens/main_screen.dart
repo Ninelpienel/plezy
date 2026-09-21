@@ -56,6 +56,8 @@ import '../providers/offline_mode_provider.dart';
 import '../services/companion_remote/companion_remote_host_controller.dart';
 import '../services/companion_remote/companion_remote_receiver.dart';
 import '../services/fullscreen_state_manager.dart';
+import '../services/htpc_mode.dart';
+import '../widgets/htpc_exit_menu.dart';
 import '../providers/companion_remote_provider.dart';
 import '../utils/desktop_window_padding.dart';
 import '../widgets/music/mini_player.dart';
@@ -1522,6 +1524,14 @@ class _MainScreenState extends State<MainScreen>
       return KeyEventResult.handled;
     }
 
+    // HTPC: the root Back asks what to do - quit, or power the PC down -
+    // like Plex HTPC, instead of the press-again-to-quit toast.
+    if (HtpcMode.isActive) {
+      _lastBackPressAt = null;
+      unawaited(showHtpcExitMenu(context));
+      return KeyEventResult.handled;
+    }
+
     final now = DateTime.now();
     final lastBackPressAt = _lastBackPressAt;
     if (lastBackPressAt != null && now.difference(lastBackPressAt) < _backExitWindow) {
@@ -1606,6 +1616,9 @@ class _MainScreenState extends State<MainScreen>
   /// player Escape away from native fullscreen, which is window state shared
   /// by every route.
   KeyEventResult _handleDesktopRootEscape(KeyEvent event) {
+    // An HTPC stays fullscreen: Escape is its keyboard Back and walks the same
+    // chain a remote does, ending in the exit menu.
+    if (HtpcMode.isActive) return KeyEventResult.ignored;
     final tabs = _getVisibleTabs(_isOffline);
     final shouldHandle = shouldHandleDesktopRootEscape(
       isDesktop: PlatformDetector.isDesktopOS(),

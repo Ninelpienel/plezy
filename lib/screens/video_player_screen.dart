@@ -46,6 +46,7 @@ import '../providers/offline_mode_provider.dart';
 import '../providers/playback_state_provider.dart';
 import '../providers/companion_remote_provider.dart';
 import '../services/fullscreen_state_manager.dart';
+import '../services/htpc_mode.dart';
 import '../services/car_ux_restrictions_service.dart';
 import '../services/driver_distraction.dart';
 import '../services/discord_rpc_service.dart';
@@ -2230,7 +2231,8 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
     final existing = _systemUiRestoreOperation;
     if (existing != null) return existing;
     if (_activeRouteGuard.identityFor(this) == null) return Future<void>.value();
-    if (PlatformDetector.isDesktopOS() && _exitFullscreenOnPlayerClose) {
+    // An HTPC never leaves fullscreen on its own.
+    if (PlatformDetector.isDesktopOS() && _exitFullscreenOnPlayerClose && !HtpcMode.isActive) {
       unawaited(FullscreenStateManager().exitFullscreen());
     }
 

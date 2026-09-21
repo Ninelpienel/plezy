@@ -368,6 +368,11 @@
     "forceTvModeDescription": "Force TV layout. For devices that don't auto-detect. Requires restart.",
     "startInFullscreen": "Start in fullscreen",
     "startInFullscreenDescription": "Open Plezy in fullscreen mode at launch",
+    "desktopView": "View",
+    "desktopViewOption": "Desktop",
+    "desktopViewOptionDescription": "Window, mouse and keyboard",
+    "htpcView": "HTPC",
+    "htpcViewDescription": "Like Plex HTPC: TV layout, fullscreen at launch, and Back on the home screen opens the exit menu",
     "exitFullscreenOnPlayerClose": "Exit fullscreen on player close",
     "exitFullscreenOnPlayerCloseDescription": "Automatically exit fullscreen when closing the video player",
     "autoHidePerformanceOverlay": "Auto-Hide Performance Overlay",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "The server redirected to a different host. Enter the final ${product} URL directly.",
     "redirectInsecure": "The server redirected from HTTPS to an insecure URL",
     "redirectUnsupportedEnterFinal": "The server redirected to an unsupported URL. Enter the final ${product} URL directly."
+  },
+  "htpc": {
+    "exitQuestion": "Do you really want to leave Plezy?",
+    "quit": "Quit",
+    "shutdown": "Shut down",
+    "restart": "Restart",
+    "sleep": "Sleep"
   }
 }

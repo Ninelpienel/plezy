@@ -368,6 +368,11 @@
     "forceTvModeDescription": "强制 TV 布局。适用于无法自动检测的设备。需要重启。",
     "startInFullscreen": "以全屏模式启动",
     "startInFullscreenDescription": "启动时以全屏模式打开 Plezy",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "关闭播放器时退出全屏",
     "exitFullscreenOnPlayerCloseDescription": "关闭视频播放器时自动退出全屏模式",
     "autoHidePerformanceOverlay": "自动隐藏性能叠加层",
@@ -2234,5 +2239,12 @@
     "redirectDifferentHost": "服务器重定向到了其他主机。请直接输入最终的 ${product} URL。",
     "redirectInsecure": "服务器从 HTTPS 重定向到了不安全的 URL",
     "redirectUnsupportedEnterFinal": "服务器重定向到了不受支持的 URL。请直接输入最终的 ${product} URL。"
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

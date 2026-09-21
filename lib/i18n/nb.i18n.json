@@ -368,6 +368,11 @@
     "forceTvModeDescription": "Tving TV-oppsett. For enheter som ikke oppdages automatisk. Krever omstart.",
     "startInFullscreen": "Start i fullskjerm",
     "startInFullscreenDescription": "Åpne Plezy i fullskjermmodus ved oppstart",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Avslutt fullskjerm ved lukking av avspiller",
     "exitFullscreenOnPlayerCloseDescription": "Avslutt fullskjerm automatisk når videospilleren lukkes",
     "autoHidePerformanceOverlay": "Skjul ytelsesoverlegg automatisk",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "Serveren omdirigerte til en annen vert. Angi den endelige ${product}-URL-en direkte.",
     "redirectInsecure": "Serveren omdirigerte fra HTTPS til en usikker URL",
     "redirectUnsupportedEnterFinal": "Serveren omdirigerte til en URL som ikke støttes. Angi den endelige ${product}-URL-en direkte."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

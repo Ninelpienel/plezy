@@ -368,6 +368,11 @@
     "forceTvModeDescription": "Forcer l’interface TV sur les appareils qui ne sont pas détectés automatiquement. Redémarrage requis.",
     "startInFullscreen": "Démarrer en plein écran",
     "startInFullscreenDescription": "Ouvrir Plezy en mode plein écran au lancement",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Quitter le plein écran à la fermeture du lecteur",
     "exitFullscreenOnPlayerCloseDescription": "Quitter automatiquement le plein écran lors de la fermeture du lecteur vidéo",
     "autoHidePerformanceOverlay": "Masquer automatiquement les données de performance",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "Le serveur a redirigé vers un hôte différent. Saisissez directement l’URL finale du serveur ${product}.",
     "redirectInsecure": "Le serveur a redirigé de HTTPS vers une URL non sécurisée",
     "redirectUnsupportedEnterFinal": "Le serveur a redirigé vers une URL non prise en charge. Saisissez directement l’URL finale du serveur ${product}."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

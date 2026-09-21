@@ -57,6 +57,20 @@ class GeneralSettingsScreen extends StatelessWidget {
           SettingsGroup(
             title: t.settings.window,
             children: [
+              SettingSelectionTile<bool>(
+                pref: SettingsService.htpcMode,
+                icon: Symbols.connected_tv_rounded,
+                title: t.settings.desktopView,
+                subtitleBuilder: (htpc) => htpc ? t.settings.htpcView : t.settings.desktopViewOption,
+                options: [
+                  DialogOption(
+                    value: false,
+                    title: t.settings.desktopViewOption,
+                    subtitle: t.settings.desktopViewOptionDescription,
+                  ),
+                  DialogOption(value: true, title: t.settings.htpcView, subtitle: t.settings.htpcViewDescription),
+                ],
+              ),
               SettingSwitchTile(
                 pref: SettingsService.startInFullscreen,
                 icon: Symbols.fullscreen_rounded,

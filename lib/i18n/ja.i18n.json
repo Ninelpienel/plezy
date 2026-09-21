@@ -368,6 +368,11 @@
     "forceTvModeDescription": "TVレイアウトを強制します。自動検出しないデバイス向けです。再起動が必要です。",
     "startInFullscreen": "全画面表示で起動",
     "startInFullscreenDescription": "起動時にPlezyを全画面モードで開きます",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "プレイヤーを閉じたときに全画面を終了",
     "exitFullscreenOnPlayerCloseDescription": "ビデオプレイヤーを閉じたときに自動的に全画面モードを終了します",
     "autoHidePerformanceOverlay": "パフォーマンスオーバーレイを自動非表示",
@@ -2234,5 +2239,12 @@
     "redirectDifferentHost": "サーバーから別のホストにリダイレクトされました。最終的な${product}のURLを直接入力してください。",
     "redirectInsecure": "サーバーからHTTPSではない安全でないURLにリダイレクトされました",
     "redirectUnsupportedEnterFinal": "サーバーからサポートされていないURLにリダイレクトされました。最終的な${product}のURLを直接入力してください。"
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

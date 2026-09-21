@@ -368,6 +368,11 @@
     "forceTvModeDescription": "Forza il layout TV sui dispositivi che non vengono rilevati automaticamente. Richiede il riavvio.",
     "startInFullscreen": "Avvia a schermo intero",
     "startInFullscreenDescription": "Apri Plezy a schermo intero all'avvio",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Esci dalla modalità a schermo intero alla chiusura del lettore",
     "exitFullscreenOnPlayerCloseDescription": "Esce automaticamente dalla modalità a schermo intero quando chiudi il lettore video",
     "autoHidePerformanceOverlay": "Nascondi automaticamente il riquadro delle prestazioni",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "Il server ha reindirizzato a un host diverso. Inserisci direttamente l'URL finale del server ${product}.",
     "redirectInsecure": "Il server ha reindirizzato da HTTPS a un URL non sicuro",
     "redirectUnsupportedEnterFinal": "Il server ha reindirizzato a un URL non supportato. Inserisci direttamente l'URL finale del server ${product}."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

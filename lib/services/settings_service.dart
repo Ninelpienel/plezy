@@ -828,6 +828,11 @@ class SettingsService extends BaseSharedPreferencesService {
   static const startInFullscreen = BoolPref('start_in_fullscreen');
   static const exitFullscreenOnPlayerClose = BoolPref('exit_fullscreen_on_player_close');
 
+  /// Desktop as a living-room HTPC, alongside Plex HTPC: TV layout, window
+  /// fullscreen from launch, and Back at the root opens the exit menu instead
+  /// of leaving fullscreen or quitting. See [HtpcMode].
+  static const htpcMode = BoolPref('htpc_mode');
+
   static const playbackBufferTier = EnumPref<PlaybackBufferTier>(
     'playback_buffer_tier',
     values: PlaybackBufferTier.values,
@@ -1427,6 +1432,7 @@ class SettingsService extends BaseSharedPreferencesService {
     enableCompanionRemoteServer,
     startInFullscreen,
     exitFullscreenOnPlayerClose,
+    htpcMode,
   ];
 
   /// Group three: reset but *not* exported — device-local paths, endpoints and

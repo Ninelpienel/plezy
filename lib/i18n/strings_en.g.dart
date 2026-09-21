@@ -91,6 +91,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$seerr$en seerr = Translations$seerr$en.internal(_root);
 	late final Translations$services$en services = Translations$services$en.internal(_root);
 	late final Translations$addServer$en addServer = Translations$addServer$en.internal(_root);
+	late final Translations$htpc$en htpc = Translations$htpc$en.internal(_root);
 }
 
 // Path: app
@@ -1142,6 +1143,21 @@ class Translations$settings$en {
 
 	/// en: 'Open Plezy in fullscreen mode at launch'
 	String get startInFullscreenDescription => 'Open Plezy in fullscreen mode at launch';
+
+	/// en: 'View'
+	String get desktopView => 'View';
+
+	/// en: 'Desktop'
+	String get desktopViewOption => 'Desktop';
+
+	/// en: 'Window, mouse and keyboard'
+	String get desktopViewOptionDescription => 'Window, mouse and keyboard';
+
+	/// en: 'HTPC'
+	String get htpcView => 'HTPC';
+
+	/// en: 'Like Plex HTPC: TV layout, fullscreen at launch, and Back on the home screen opens the exit menu'
+	String get htpcViewDescription => 'Like Plex HTPC: TV layout, fullscreen at launch, and Back on the home screen opens the exit menu';
 
 	/// en: 'Exit fullscreen on player close'
 	String get exitFullscreenOnPlayerClose => 'Exit fullscreen on player close';
@@ -5600,6 +5616,30 @@ class Translations$addServer$en {
 	String redirectUnsupportedEnterFinal({required Object product}) => 'The server redirected to an unsupported URL. Enter the final ${product} URL directly.';
 }
 
+// Path: htpc
+class Translations$htpc$en {
+	Translations$htpc$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Do you really want to leave Plezy?'
+	String get exitQuestion => 'Do you really want to leave Plezy?';
+
+	/// en: 'Quit'
+	String get quit => 'Quit';
+
+	/// en: 'Shut down'
+	String get shutdown => 'Shut down';
+
+	/// en: 'Restart'
+	String get restart => 'Restart';
+
+	/// en: 'Sleep'
+	String get sleep => 'Sleep';
+}
+
 // Path: common.ratingSource
 class Translations$common$ratingSource$en {
 	Translations$common$ratingSource$en.internal(this._root);
@@ -7453,6 +7493,11 @@ extension on Translations {
 			'settings.forceTvModeDescription' => 'Force TV layout. For devices that don\'t auto-detect. Requires restart.',
 			'settings.startInFullscreen' => 'Start in fullscreen',
 			'settings.startInFullscreenDescription' => 'Open Plezy in fullscreen mode at launch',
+			'settings.desktopView' => 'View',
+			'settings.desktopViewOption' => 'Desktop',
+			'settings.desktopViewOptionDescription' => 'Window, mouse and keyboard',
+			'settings.htpcView' => 'HTPC',
+			'settings.htpcViewDescription' => 'Like Plex HTPC: TV layout, fullscreen at launch, and Back on the home screen opens the exit menu',
 			'settings.exitFullscreenOnPlayerClose' => 'Exit fullscreen on player close',
 			'settings.exitFullscreenOnPlayerCloseDescription' => 'Automatically exit fullscreen when closing the video player',
 			'settings.autoHidePerformanceOverlay' => 'Auto-Hide Performance Overlay',
@@ -7606,13 +7651,13 @@ extension on Translations {
 			'fileInfo.subtitleFormat' => 'Sidecar Format',
 			'fileInfo.provider' => 'Provider',
 			'fileInfo.matchScore' => 'Match Score',
+			_ => null,
+		} ?? switch (path) {
 			'fileInfo.externalDelivery' => 'Can Be Served Separately',
 			'fileInfo.sidecarPath' => 'Sidecar Path',
 			'fileInfo.sourceStream' => 'Copied From',
 			'fileInfo.temporary' => 'Temporary',
 			'fileInfo.timeBase' => 'Time Base',
-			_ => null,
-		} ?? switch (path) {
 			'fileInfo.overallBitrate' => 'Overall Bitrate',
 			'fileInfo.path' => 'Path',
 			'fileInfo.fileName' => 'File Name',
@@ -8120,13 +8165,13 @@ extension on Translations {
 			'libraries.scanLibraryConfirm' => ({required Object title}) => 'Are you sure you want to scan "${title}"?',
 			'libraries.analyzeLibraryConfirm' => ({required Object title}) => 'Are you sure you want to analyze "${title}"?',
 			'libraries.refreshMetadataConfirm' => ({required Object title}) => 'Are you sure you want to refresh metadata for "${title}"?',
+			_ => null,
+		} ?? switch (path) {
 			'libraries.emptyTrashConfirm' => ({required Object title}) => 'Are you sure you want to empty trash for "${title}"?',
 			'libraries.manageLibraries' => 'Manage Libraries',
 			'libraries.sort' => 'Sort',
 			'libraries.sortBy' => 'Sort By',
 			'libraries.filters' => 'Filters',
-			_ => null,
-		} ?? switch (path) {
 			'libraries.confirmActionMessage' => 'Are you sure you want to perform this action?',
 			'libraries.showLibrary' => 'Show library',
 			'libraries.hideLibrary' => 'Hide library',
@@ -8634,13 +8679,13 @@ extension on Translations {
 			'downloads.retryDownload' => 'Retry download',
 			'downloads.downloadQueued' => 'Download queued',
 			'downloads.downloadResumed' => 'Download resumed',
+			_ => null,
+		} ?? switch (path) {
 			'downloads.serverErrorBitrate' => 'Server error: file may exceed the remote bitrate limit',
 			'downloads.storageFull' => 'Downloads stopped to protect available storage. Free some space or choose another download location, then retry.',
 			'downloads.storageUnavailable' => 'Downloads stopped because available storage could not be checked. Check the download location, then retry.',
 			'downloads.episodesQueued' => ({required Object count}) => '${count} episodes queued for download',
 			'downloads.downloadDeleted' => 'Download deleted',
-			_ => null,
-		} ?? switch (path) {
 			'downloads.deleteConfirm' => ({required Object title}) => 'Delete "${title}" from this device?',
 			'downloads.cancelledDownloadTitle' => 'Canceled Download',
 			'downloads.cancelledDownloadMessage' => 'This download was canceled. What would you like to do?',
@@ -9140,6 +9185,11 @@ extension on Translations {
 			'addServer.redirectDifferentHost' => ({required Object product}) => 'The server redirected to a different host. Enter the final ${product} URL directly.',
 			'addServer.redirectInsecure' => 'The server redirected from HTTPS to an insecure URL',
 			'addServer.redirectUnsupportedEnterFinal' => ({required Object product}) => 'The server redirected to an unsupported URL. Enter the final ${product} URL directly.',
+			'htpc.exitQuestion' => 'Do you really want to leave Plezy?',
+			'htpc.quit' => 'Quit',
+			'htpc.shutdown' => 'Shut down',
+			'htpc.restart' => 'Restart',
+			'htpc.sleep' => 'Sleep',
 			_ => null,
 		};
 	}

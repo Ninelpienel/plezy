@@ -368,6 +368,11 @@
     "forceTvModeDescription": "TV интерфейсін мәжбүрлеу.",
     "startInFullscreen": "Толық экранда бастау",
     "startInFullscreenDescription": "Plezy-ді ашқанда толық экран режимінде ашу",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Ойнатқыш жабылғанда толық экраннан шығу",
     "exitFullscreenOnPlayerCloseDescription": "Видео ойнатқышты жапқанда автоматты түрде толық экраннан шығу",
     "autoHidePerformanceOverlay": "Өнімділік панелін авто-жасыру",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "Сервер басқа хостқа қайта бағыттады. Соңғы ${product} URL-ін тікелей енгізіңіз.",
     "redirectInsecure": "Сервер HTTPS мекенжайынан қауіпсіз емес URL-ге қайта бағыттады",
     "redirectUnsupportedEnterFinal": "Сервер қолдау көрсетілмейтін URL-ге қайта бағыттады. Соңғы ${product} URL-ін тікелей енгізіңіз."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

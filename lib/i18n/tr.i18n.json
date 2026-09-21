@@ -368,6 +368,11 @@
     "forceTvModeDescription": "TV düzenini zorla. Otomatik algılamayan cihazlar içindir. Yeniden başlatma gerektirir.",
     "startInFullscreen": "Tam ekranda başlat",
     "startInFullscreenDescription": "Plezy'yi açılışta tam ekran modunda aç",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Oynatıcı kapandığında tam ekrandan çık",
     "exitFullscreenOnPlayerCloseDescription": "Video oynatıcıyı kapatırken otomatik olarak tam ekrandan çık",
     "autoHidePerformanceOverlay": "Performans Katmanını Otomatik Gizle",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "Sunucu farklı bir ana makineye yönlendirdi. Nihai ${product} URL'sini doğrudan girin.",
     "redirectInsecure": "Sunucu HTTPS'den güvenli olmayan bir URL'ye yönlendirdi",
     "redirectUnsupportedEnterFinal": "Sunucu desteklenmeyen bir URL'ye yönlendirdi. Nihai ${product} URL'sini doğrudan girin."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

@@ -368,6 +368,11 @@
     "forceTvModeDescription": "TV-Layout erzwingen. Für Geräte ohne automatische Erkennung. Neustart erforderlich.",
     "startInFullscreen": "Im Vollbildmodus starten",
     "startInFullscreenDescription": "Plezy beim Start im Vollbildmodus öffnen",
+    "desktopView": "Ansicht",
+    "desktopViewOption": "Desktop",
+    "desktopViewOptionDescription": "Fenster, Maus und Tastatur",
+    "htpcView": "HTPC",
+    "htpcViewDescription": "Wie Plex HTPC: TV-Layout, Vollbild beim Start, und Zurück auf der Startseite öffnet das Beenden-Menü",
     "exitFullscreenOnPlayerClose": "Vollbild beim Schließen des Players beenden",
     "exitFullscreenOnPlayerCloseDescription": "Vollbildmodus automatisch beenden, wenn der Videoplayer geschlossen wird",
     "autoHidePerformanceOverlay": "Leistungsoverlay automatisch ausblenden",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "Der Server hat zu einem anderen Host weitergeleitet. Gib die endgültige ${product}-URL direkt ein.",
     "redirectInsecure": "Der Server hat von HTTPS zu einer unsicheren URL weitergeleitet",
     "redirectUnsupportedEnterFinal": "Der Server hat zu einer nicht unterstützten URL weitergeleitet. Gib die endgültige ${product}-URL direkt ein."
+  },
+  "htpc": {
+    "exitQuestion": "Möchtest du Plezy wirklich verlassen?",
+    "quit": "Beenden",
+    "shutdown": "Ausschalten",
+    "restart": "Neustart",
+    "sleep": "Ruhezustand"
   }
 }

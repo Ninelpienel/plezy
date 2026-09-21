@@ -368,6 +368,11 @@
     "forceTvModeDescription": "TV interfeysini majburiy yoqish.",
     "startInFullscreen": "Toʻliq ekranda boshlash",
     "startInFullscreenDescription": "Plezy-ni ochganda toʻliq ekran rejimida ochish",
+    "desktopView": "",
+    "desktopViewOption": "",
+    "desktopViewOptionDescription": "",
+    "htpcView": "",
+    "htpcViewDescription": "",
     "exitFullscreenOnPlayerClose": "Pleyer yopilganda toʻliq ekrandan chiqish",
     "exitFullscreenOnPlayerCloseDescription": "Video pleyerni yopganda avtomatik ravishda toʻliq ekrandan chiqish",
     "autoHidePerformanceOverlay": "Unumdorlik panelini avto-yashirish",
@@ -2245,5 +2250,12 @@
     "redirectDifferentHost": "Server boshqa xostga yoʻnaltirdi. Yakuniy ${product} URL-ini bevosita kiriting.",
     "redirectInsecure": "Server HTTPS manzilidan xavfsiz boʻlmagan URL-ga yoʻnaltirdi",
     "redirectUnsupportedEnterFinal": "Server qoʻllab-quvvatlanmaydigan URL-ga yoʻnaltirdi. Yakuniy ${product} URL-ini bevosita kiriting."
+  },
+  "htpc": {
+    "exitQuestion": "",
+    "quit": "",
+    "shutdown": "",
+    "restart": "",
+    "sleep": ""
   }
 }

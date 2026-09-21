@@ -40,6 +40,7 @@ import 'services/video_decode_capabilities.dart';
 import 'services/macos_window_service.dart';
 import 'services/native_window_service.dart';
 import 'services/fullscreen_state_manager.dart';
+import 'services/htpc_mode.dart';
 import 'services/settings_service.dart';
 import 'services/agent_control_service.dart';
 import 'widgets/agent_control_scope.dart';
@@ -205,7 +206,7 @@ void _bootstrapApp() {
 /// which would make a fresh Android TV install resolve the light theme.
 Future<StartupThemeResolution> _resolveStartupTheme() async {
   final settings = await SettingsService.getInstance();
-  await TvDetectionService.getInstance(forceTv: settings.read(SettingsService.forceTvMode));
+  await TvDetectionService.getInstance(forceTv: HtpcMode.forcesTvLayout(settings));
   final mode = settings.read(SettingsService.themeMode);
   return (themeMode: ThemeProvider.materialThemeModeFor(mode), darkTheme: ThemeProvider.darkThemeFor(mode));
 }
@@ -949,7 +950,7 @@ Future<_StartupDependencies> _initializeStartup(SettingsService settings) async 
     // three have a working sync fallback, so a detection failure is not fatal.
     await _optionalGatePhase(StartupPhase.deviceCapabilities, () async {
       await (
-        TvDetectionService.getInstance(forceTv: settings.read(SettingsService.forceTvMode)),
+        TvDetectionService.getInstance(forceTv: HtpcMode.forcesTvLayout(settings)),
         DevicePerformance.getInstance(override: settings.read(SettingsService.visualEffects)),
         VideoDecodeCapabilities.getInstance(),
       ).wait;
@@ -1029,7 +1030,7 @@ void _startNonessentialInitialization(SettingsService settings) {
 
   bestEffort('Fullscreen monitor', () async {
     FullscreenStateManager().startMonitoring();
-    if (PlatformDetector.isDesktopOS() && settings.read(SettingsService.startInFullscreen)) {
+    if (HtpcMode.startsFullscreen(settings)) {
       await FullscreenStateManager().enterFullscreen();
     }
   });

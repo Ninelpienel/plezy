@@ -90,6 +90,7 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$seerr$de seerr = _Translations$seerr$de._(_root);
 	@override late final _Translations$services$de services = _Translations$services$de._(_root);
 	@override late final _Translations$addServer$de addServer = _Translations$addServer$de._(_root);
+	@override late final _Translations$htpc$de htpc = _Translations$htpc$de._(_root);
 }
 
 // Path: app
@@ -477,6 +478,11 @@ class _Translations$settings$de extends Translations$settings$en {
 	@override String get forceTvModeDescription => 'TV-Layout erzwingen. Für Geräte ohne automatische Erkennung. Neustart erforderlich.';
 	@override String get startInFullscreen => 'Im Vollbildmodus starten';
 	@override String get startInFullscreenDescription => 'Plezy beim Start im Vollbildmodus öffnen';
+	@override String get desktopView => 'Ansicht';
+	@override String get desktopViewOption => 'Desktop';
+	@override String get desktopViewOptionDescription => 'Fenster, Maus und Tastatur';
+	@override String get htpcView => 'HTPC';
+	@override String get htpcViewDescription => 'Wie Plex HTPC: TV-Layout, Vollbild beim Start, und Zurück auf der Startseite öffnet das Beenden-Menü';
 	@override String get exitFullscreenOnPlayerClose => 'Vollbild beim Schließen des Players beenden';
 	@override String get exitFullscreenOnPlayerCloseDescription => 'Vollbildmodus automatisch beenden, wenn der Videoplayer geschlossen wird';
 	@override String get autoHidePerformanceOverlay => 'Leistungsoverlay automatisch ausblenden';
@@ -2266,6 +2272,20 @@ class _Translations$addServer$de extends Translations$addServer$en {
 	@override String redirectUnsupportedEnterFinal({required Object product}) => 'Der Server hat zu einer nicht unterstützten URL weitergeleitet. Gib die endgültige ${product}-URL direkt ein.';
 }
 
+// Path: htpc
+class _Translations$htpc$de extends Translations$htpc$en {
+	_Translations$htpc$de._(TranslationsDe root) : this._root = root, super.internal(root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get exitQuestion => 'Möchtest du Plezy wirklich verlassen?';
+	@override String get quit => 'Beenden';
+	@override String get shutdown => 'Ausschalten';
+	@override String get restart => 'Neustart';
+	@override String get sleep => 'Ruhezustand';
+}
+
 // Path: common.ratingSource
 class _Translations$common$ratingSource$de extends Translations$common$ratingSource$en {
 	_Translations$common$ratingSource$de._(TranslationsDe root) : this._root = root, super.internal(root);
@@ -3344,6 +3364,11 @@ extension on TranslationsDe {
 			'settings.forceTvModeDescription' => 'TV-Layout erzwingen. Für Geräte ohne automatische Erkennung. Neustart erforderlich.',
 			'settings.startInFullscreen' => 'Im Vollbildmodus starten',
 			'settings.startInFullscreenDescription' => 'Plezy beim Start im Vollbildmodus öffnen',
+			'settings.desktopView' => 'Ansicht',
+			'settings.desktopViewOption' => 'Desktop',
+			'settings.desktopViewOptionDescription' => 'Fenster, Maus und Tastatur',
+			'settings.htpcView' => 'HTPC',
+			'settings.htpcViewDescription' => 'Wie Plex HTPC: TV-Layout, Vollbild beim Start, und Zurück auf der Startseite öffnet das Beenden-Menü',
 			'settings.exitFullscreenOnPlayerClose' => 'Vollbild beim Schließen des Players beenden',
 			'settings.exitFullscreenOnPlayerCloseDescription' => 'Vollbildmodus automatisch beenden, wenn der Videoplayer geschlossen wird',
 			'settings.autoHidePerformanceOverlay' => 'Leistungsoverlay automatisch ausblenden',
@@ -3497,13 +3522,13 @@ extension on TranslationsDe {
 			'fileInfo.subtitleFormat' => 'Sidecar-Format',
 			'fileInfo.provider' => 'Anbieter',
 			'fileInfo.matchScore' => 'Übereinstimmungswert',
+			_ => null,
+		} ?? switch (path) {
 			'fileInfo.externalDelivery' => 'Kann separat bereitgestellt werden',
 			'fileInfo.sidecarPath' => 'Sidecar-Pfad',
 			'fileInfo.sourceStream' => 'Kopiert von',
 			'fileInfo.temporary' => 'Temporär',
 			'fileInfo.timeBase' => 'Zeitbasis',
-			_ => null,
-		} ?? switch (path) {
 			'fileInfo.overallBitrate' => 'Gesamtbitrate',
 			'fileInfo.path' => 'Pfad',
 			'fileInfo.fileName' => 'Dateiname',
@@ -4011,13 +4036,13 @@ extension on TranslationsDe {
 			'libraries.analyzeLibraryConfirm' => ({required Object title}) => '„${title}“ wirklich analysieren?',
 			'libraries.refreshMetadataConfirm' => ({required Object title}) => 'Metadaten für „${title}“ wirklich aktualisieren?',
 			'libraries.emptyTrashConfirm' => ({required Object title}) => 'Papierkorb für „${title}“ wirklich leeren?',
+			_ => null,
+		} ?? switch (path) {
 			'libraries.manageLibraries' => 'Mediatheken verwalten',
 			'libraries.sort' => 'Sortieren',
 			'libraries.sortBy' => 'Sortieren nach',
 			'libraries.filters' => 'Filter',
 			'libraries.confirmActionMessage' => 'Aktion wirklich durchführen?',
-			_ => null,
-		} ?? switch (path) {
 			'libraries.showLibrary' => 'Mediathek anzeigen',
 			'libraries.hideLibrary' => 'Mediathek ausblenden',
 			'libraries.libraryOptions' => 'Mediatheksoptionen',
@@ -4525,13 +4550,13 @@ extension on TranslationsDe {
 			'downloads.storageFull' => 'Die Downloads wurden angehalten, weil der Gerätespeicher voll ist. Gib Speicherplatz frei und versuche es erneut.',
 			'downloads.storageUnavailable' => 'Downloads wurden angehalten, weil der verfügbare Speicherplatz nicht geprüft werden konnte. Prüfe den Download-Speicherort und versuche es erneut.',
 			'downloads.episodesQueued' => ({required Object count}) => '${count} Episoden zum Download hinzugefügt',
+			_ => null,
+		} ?? switch (path) {
 			'downloads.downloadDeleted' => 'Download gelöscht',
 			'downloads.deleteConfirm' => ({required Object title}) => '"${title}" von diesem Gerät löschen?',
 			'downloads.cancelledDownloadTitle' => 'Abgebrochener Download',
 			'downloads.cancelledDownloadMessage' => 'Dieser Download wurde abgebrochen. Was möchtest du tun?',
 			'downloads.allEpisodesAlreadyDownloaded' => 'Alle Episoden sind bereits heruntergeladen',
-			_ => null,
-		} ?? switch (path) {
 			'downloads.resumeDownload' => 'Download fortsetzen',
 			'downloads.cancelledDownload' => 'Abgebrochener Download',
 			'downloads.syncingFile' => ({required Object file, required Object status}) => '${file} (${status} wird synchronisiert)',
@@ -5024,6 +5049,11 @@ extension on TranslationsDe {
 			'addServer.redirectDifferentHost' => ({required Object product}) => 'Der Server hat zu einem anderen Host weitergeleitet. Gib die endgültige ${product}-URL direkt ein.',
 			'addServer.redirectInsecure' => 'Der Server hat von HTTPS zu einer unsicheren URL weitergeleitet',
 			'addServer.redirectUnsupportedEnterFinal' => ({required Object product}) => 'Der Server hat zu einer nicht unterstützten URL weitergeleitet. Gib die endgültige ${product}-URL direkt ein.',
+			'htpc.exitQuestion' => 'Möchtest du Plezy wirklich verlassen?',
+			'htpc.quit' => 'Beenden',
+			'htpc.shutdown' => 'Ausschalten',
+			'htpc.restart' => 'Neustart',
+			'htpc.sleep' => 'Ruhezustand',
 			_ => null,
 		};
 	}
