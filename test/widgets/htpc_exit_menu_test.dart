@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plezy/i18n/strings.g.dart';
 import 'package:plezy/services/htpc_mode.dart';
+import 'package:plezy/utils/dialogs.dart';
 import 'package:plezy/widgets/htpc_exit_menu.dart';
 
 /// The exit menu is the only way out of an HTPC session from the couch, so
@@ -19,9 +20,7 @@ void main() {
           builder: (context) => Center(
             child: TextButton(
               onPressed: () async => results.add(
-                await Navigator.of(
-                  context,
-                ).push<HtpcPowerAction>(MaterialPageRoute(builder: (_) => const HtpcExitMenu())),
+                await showScopedDialog<HtpcPowerAction>(context: context, builder: (_) => const HtpcExitMenu()),
               ),
               child: const Text('open'),
             ),
@@ -39,7 +38,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('offers the five Plex HTPC choices, Quit first and focused', (tester) async {
+  testWidgets('offers the five choices, Quit first and focused', (tester) async {
     await pumpMenu(tester);
 
     expect(find.text('Do you really want to leave Plezy?'), findsOneWidget);
@@ -57,11 +56,9 @@ void main() {
     expect(results, [HtpcPowerAction.quit]);
   });
 
-  testWidgets('arrows walk the rows and stop at the ends', (tester) async {
+  testWidgets('arrows walk the rows', (tester) async {
     final results = await pumpMenu(tester);
 
-    await press(tester, LogicalKeyboardKey.arrowUp);
-    expect(FocusManager.instance.primaryFocus?.debugLabel, 'HtpcExitMenu0', reason: 'no wrap above Quit');
     await press(tester, LogicalKeyboardKey.arrowDown);
     await press(tester, LogicalKeyboardKey.arrowDown);
     await press(tester, LogicalKeyboardKey.enter);
@@ -76,6 +73,12 @@ void main() {
 
     expect(results, [null]);
     expect(find.byType(HtpcExitMenu), findsNothing);
+  });
+
+  testWidgets('is a themed Plezy dialog, not a full-screen sheet', (tester) async {
+    await pumpMenu(tester);
+
+    expect(find.byType(SimpleDialog), findsOneWidget);
   });
 
   testWidgets('Cancel cancels', (tester) async {

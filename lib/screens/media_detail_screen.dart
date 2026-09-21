@@ -128,6 +128,7 @@ const double _tvDetailTallPosterScale = 0.72;
 const double _tvDetailEpisodeThumbnailScale = 0.72;
 const double _tvDetailActionSize = 46;
 const double _tvDetailActionRailGap = 4;
+const double _tvDetailSummaryLineSpacing = 1.34;
 const String _tvDetailSeasonsErrorHubId = 'detail_seasons_error';
 const String _tvDetailSeasonHubIdPrefix = 'detail_season_';
 const String _tvDetailExtrasHubId = 'detail_extras';
@@ -3719,16 +3720,19 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
         if (constraints.maxHeight <= 0 || constraints.maxWidth <= 0) return const SizedBox.shrink();
 
         final availableHeight = constraints.maxHeight.isFinite ? constraints.maxHeight : 264.0;
-        final desiredLogoHeight = 220 * scale;
-        final minLogoHeight = 60 * scale;
-        final desiredLogoWidth = 790 * scale;
-        final episodeTitleLineHeight = 30 * scale;
+        // Same type and logo sizes as the home screen's spotlight
+        // (TvSpotlightBackground, compact), so the header does not jump in
+        // size between the start page and the detail page of the same item.
+        final desiredLogoHeight = TvLayoutConstants.compactHeroLogoHeight * scale;
+        final minLogoHeight = 40 * scale;
+        final desiredLogoWidth = TvLayoutConstants.compactHeroLogoWidth * scale;
+        final episodeTitleLineHeight = 22 * scale;
         final episodeTitleGap = 4 * scale;
-        final metadataLineHeight = 22 * scale;
-        final logoMetadataGap = 14 * scale;
-        final summaryGap = 10 * scale;
-        final summaryFontSize = availableHeight < 260 * scale ? 16.2 * scale : 18 * scale;
-        final summaryLineHeight = summaryFontSize * 1.35;
+        final metadataLineHeight = 18 * scale;
+        final logoMetadataGap = 12 * scale;
+        final summaryGap = 12 * scale;
+        final summaryFontSize = 13 * scale;
+        final summaryLineHeight = summaryFontSize * _tvDetailSummaryLineSpacing;
         final actionHeight = _tvDetailActionSize * scale;
         final actionGap = 16 * scale;
         final hasDescription = description != null && description.isNotEmpty;
@@ -3806,7 +3810,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                                 titleBuilder: (context, title) => _buildDetailTitle(
                                   context,
                                   title,
-                                  fontSize: 56 * scale,
+                                  fontSize: 30 * scale,
                                   fontWeight: .w800,
                                   shadowBlur: 12,
                                 ),
@@ -3848,7 +3852,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                                             overflow: .ellipsis,
                                             style: TextStyle(
                                               color: foregroundColor,
-                                              fontSize: 24 * scale,
+                                              fontSize: 17 * scale,
                                               fontWeight: .w700,
                                               height: 1.2,
                                             ),
@@ -3875,7 +3879,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
                                           style: theme.textTheme.bodyLarge?.copyWith(
                                             color: mutedForegroundColor,
                                             fontSize: summaryFontSize,
-                                            height: 1.35,
+                                            height: _tvDetailSummaryLineSpacing,
                                           ),
                                         ),
                                       ),
@@ -4040,7 +4044,7 @@ class _MediaDetailScreenState extends State<MediaDetailScreen>
   Widget _buildTvDetailMetadataLine(BuildContext context, MediaItem metadata, double scale) {
     final textStyle = TextStyle(
       color: _tvDetailForegroundColor(context),
-      fontSize: 18 * scale,
+      fontSize: 13 * scale,
       fontWeight: .w700,
       letterSpacing: 0.1,
     );
