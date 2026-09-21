@@ -5,7 +5,6 @@
 /// without config-file support still use.
 library;
 
-
 /// Property names the free-form mpv config is not allowed to write.
 ///
 /// Neither is an mpv property. The Linux plugin intercepts both by name and

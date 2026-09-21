@@ -88,10 +88,9 @@ abstract final class MpvConfigFile {
 
       final config = sanitize(settings.read(SettingsService.mpvConfigText), withheldOptions);
       File(p.join(directoryPath, mpvConfName)).writeAsStringSync(config, flush: true);
-      File(p.join(directoryPath, inputConfName)).writeAsStringSync(
-        settings.read(SettingsService.mpvInputConfText),
-        flush: true,
-      );
+      File(
+        p.join(directoryPath, inputConfName),
+      ).writeAsStringSync(settings.read(SettingsService.mpvInputConfText), flush: true);
       return directoryPath;
     } catch (e, st) {
       appLogger.w('Could not write the mpv config directory', error: e, stackTrace: st);
