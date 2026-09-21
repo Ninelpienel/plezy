@@ -874,7 +874,10 @@
     "lineHint": "option=value",
     "addLine": "行を追加",
     "removeLine": "行を削除",
-    "embeddedVoHint": "Linux では vo、gpu-context、gpu-api は無視されます。埋め込み動画は常にビデオプレーン上で vo=libmpv を通してレンダリングされ、gpu-next（ArtCNN のようなコンピュートシェーダーに必要）は埋め込みでは実行できません。"
+    "embeddedVoHint": "Linux では vo、gpu-context、gpu-api は無視されます。埋め込み動画は常にビデオプレーン上で vo=libmpv を通してレンダリングされ、gpu-next（ArtCNN のようなコンピュートシェーダーに必要）は埋め込みでは実行できません。",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "操作の確認"

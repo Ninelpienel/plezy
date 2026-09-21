@@ -878,7 +878,10 @@
     "lineHint": "option=value",
     "addLine": "Tilføj linje",
     "removeLine": "Fjern linje",
-    "embeddedVoHint": "vo, gpu-context og gpu-api ignoreres på Linux: indlejret video renderes altid via vo=libmpv på videoplanen, og gpu-next (som compute-shaders som ArtCNN kræver) kan ikke køre indlejret."
+    "embeddedVoHint": "vo, gpu-context og gpu-api ignoreres på Linux: indlejret video renderes altid via vo=libmpv på videoplanen, og gpu-next (som compute-shaders som ArtCNN kræver) kan ikke køre indlejret.",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "Bekræft handling"

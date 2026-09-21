@@ -886,7 +886,10 @@
     "lineHint": "option=value",
     "addLine": "Dodaj wiersz",
     "removeLine": "Usuń wiersz",
-    "embeddedVoHint": "vo, gpu-context i gpu-api są ignorowane w systemie Linux: wbudowane wideo jest zawsze renderowane przez vo=libmpv na płaszczyźnie wideo, a gpu-next (wymagany przez shadery obliczeniowe takie jak ArtCNN) nie może działać w trybie wbudowanym."
+    "embeddedVoHint": "vo, gpu-context i gpu-api są ignorowane w systemie Linux: wbudowane wideo jest zawsze renderowane przez vo=libmpv na płaszczyźnie wideo, a gpu-next (wymagany przez shadery obliczeniowe takie jak ArtCNN) nie może działać w trybie wbudowanym.",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "Potwierdź działanie"

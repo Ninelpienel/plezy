@@ -874,7 +874,10 @@
     "lineHint": "option=value",
     "addLine": "新增行",
     "removeLine": "移除行",
-    "embeddedVoHint": "在 Linux 上會忽略 vo、gpu-context 和 gpu-api：嵌入式影片一律透過影片平面上的 vo=libmpv 轉譯，而 gpu-next（ArtCNN 等計算著色器需要它）無法以嵌入式方式執行。"
+    "embeddedVoHint": "在 Linux 上會忽略 vo、gpu-context 和 gpu-api：嵌入式影片一律透過影片平面上的 vo=libmpv 轉譯，而 gpu-next（ArtCNN 等計算著色器需要它）無法以嵌入式方式執行。",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "確認操作"

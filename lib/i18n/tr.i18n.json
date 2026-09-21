@@ -878,7 +878,10 @@
     "lineHint": "option=value",
     "addLine": "Satır Ekle",
     "removeLine": "Satırı Kaldır",
-    "embeddedVoHint": "vo, gpu-context ve gpu-api Linux'ta yok sayılır: gömülü video her zaman video düzleminde vo=libmpv üzerinden işlenir ve gpu-next (ArtCNN gibi compute shader'ların ihtiyaç duyduğu) gömülü olarak çalışamaz."
+    "embeddedVoHint": "vo, gpu-context ve gpu-api Linux'ta yok sayılır: gömülü video her zaman video düzleminde vo=libmpv üzerinden işlenir ve gpu-next (ArtCNN gibi compute shader'ların ihtiyaç duyduğu) gömülü olarak çalışamaz.",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "Eylemi Onayla"

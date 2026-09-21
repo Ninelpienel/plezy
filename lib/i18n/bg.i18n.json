@@ -878,7 +878,10 @@
     "lineHint": "option=value",
     "addLine": "Добави ред",
     "removeLine": "Премахни ред",
-    "embeddedVoHint": "vo, gpu-context и gpu-api се игнорират на Linux: вграденото видео винаги се рендерира през vo=libmpv върху видео равнината, а gpu-next (който е нужен за compute шейдъри като ArtCNN) не може да работи вградено."
+    "embeddedVoHint": "vo, gpu-context и gpu-api се игнорират на Linux: вграденото видео винаги се рендерира през vo=libmpv върху видео равнината, а gpu-next (който е нужен за compute шейдъри като ArtCNN) не може да работи вградено.",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "Потвърждение на действие"

@@ -878,7 +878,10 @@
     "lineHint": "option=value",
     "addLine": "Qator qoʻshish",
     "removeLine": "Qatorni oʻchirish",
-    "embeddedVoHint": "Linux-da vo, gpu-context va gpu-api e'tiborga olinmaydi: ichki video har doim video tekisligida vo=libmpv orqali ko'rsatiladi va gpu-next (ArtCNN kabi compute shaderlar uchun zarur) ichki rejimda ishlay olmaydi."
+    "embeddedVoHint": "Linux-da vo, gpu-context va gpu-api e'tiborga olinmaydi: ichki video har doim video tekisligida vo=libmpv orqali ko'rsatiladi va gpu-next (ArtCNN kabi compute shaderlar uchun zarur) ichki rejimda ishlay olmaydi.",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "Harakatni tasdiqlash"

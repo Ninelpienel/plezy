@@ -878,7 +878,10 @@
     "lineHint": "option=value",
     "addLine": "Regel toevoegen",
     "removeLine": "Regel verwijderen",
-    "embeddedVoHint": "vo, gpu-context en gpu-api worden genegeerd op Linux: ingebedde video wordt altijd weergegeven via vo=libmpv op het videovlak, en gpu-next (nodig voor compute-shaders zoals ArtCNN) kan niet ingebed draaien."
+    "embeddedVoHint": "vo, gpu-context en gpu-api worden genegeerd op Linux: ingebedde video wordt altijd weergegeven via vo=libmpv op het videovlak, en gpu-next (nodig voor compute-shaders zoals ArtCNN) kan niet ingebed draaien.",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "Bevestig actie"

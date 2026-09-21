@@ -878,7 +878,10 @@
     "lineHint": "option=value",
     "addLine": "Añadir línea",
     "removeLine": "Eliminar línea",
-    "embeddedVoHint": "vo, gpu-context y gpu-api se ignoran en Linux: el vídeo integrado siempre se renderiza mediante vo=libmpv en el plano de vídeo, y gpu-next (que los shaders de cómputo como ArtCNN necesitan) no puede ejecutarse integrado."
+    "embeddedVoHint": "vo, gpu-context y gpu-api se ignoran en Linux: el vídeo integrado siempre se renderiza mediante vo=libmpv en el plano de vídeo, y gpu-next (que los shaders de cómputo como ArtCNN necesitan) no puede ejecutarse integrado.",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "Confirmar acción"

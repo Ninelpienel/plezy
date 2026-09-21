@@ -878,7 +878,10 @@
     "lineHint": "option=value",
     "addLine": "Жол қосу",
     "removeLine": "Жолды өшіру",
-    "embeddedVoHint": "vo, gpu-context және gpu-api Linux-те еленбейді: ендірілген бейне әрқашан бейне жазықтығында vo=libmpv арқылы көрсетіледі, ал gpu-next (ArtCNN сияқты compute шейдерлеріне қажет) ендірілген режимде жұмыс істей алмайды."
+    "embeddedVoHint": "vo, gpu-context және gpu-api Linux-те еленбейді: ендірілген бейне әрқашан бейне жазықтығында vo=libmpv арқылы көрсетіледі, ал gpu-next (ArtCNN сияқты compute шейдерлеріне қажет) ендірілген режимде жұмыс істей алмайды.",
+    "inputConfTitle": "",
+    "inputConfDescription": "",
+    "inputConfPlaceholder": ""
   },
   "dialog": {
     "confirmAction": "Әрекетті растау"
