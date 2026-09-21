@@ -12,8 +12,8 @@
 #include <memory>
 #include <mutex>
 #include <string>
-#include <utility>
 #include <thread>
+#include <utility>
 #include <vector>
 
 #include "../../../shared/mpv/mpv_player_common.h"
