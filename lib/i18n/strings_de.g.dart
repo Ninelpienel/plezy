@@ -1035,6 +1035,9 @@ class _Translations$mpvConfig$de extends Translations$mpvConfig$en {
 	@override String get addLine => 'Zeile hinzufügen';
 	@override String get removeLine => 'Zeile entfernen';
 	@override String get embeddedVoHint => 'vo, gpu-context und gpu-api werden unter Linux ignoriert: eingebettetes Video wird immer über vo=libmpv auf der Videoebene gerendert, und gpu-next (das Compute-Shader wie ArtCNN benötigen) kann nicht eingebettet ausgeführt werden.';
+	@override String get inputConfTitle => 'input.conf';
+	@override String get inputConfDescription => 'mpv-Tastenbelegungen. Eine hier belegte Taste ersetzt Plezys Tastenkürzel dafür';
+	@override String get inputConfPlaceholder => 'i script-binding stats/display-stats\nk cycle deband\n# Kommentar';
 }
 
 // Path: dialog
@@ -3812,6 +3815,9 @@ extension on TranslationsDe {
 			'mpvConfig.addLine' => 'Zeile hinzufügen',
 			'mpvConfig.removeLine' => 'Zeile entfernen',
 			'mpvConfig.embeddedVoHint' => 'vo, gpu-context und gpu-api werden unter Linux ignoriert: eingebettetes Video wird immer über vo=libmpv auf der Videoebene gerendert, und gpu-next (das Compute-Shader wie ArtCNN benötigen) kann nicht eingebettet ausgeführt werden.',
+			'mpvConfig.inputConfTitle' => 'input.conf',
+			'mpvConfig.inputConfDescription' => 'mpv-Tastenbelegungen. Eine hier belegte Taste ersetzt Plezys Tastenkürzel dafür',
+			'mpvConfig.inputConfPlaceholder' => 'i script-binding stats/display-stats\nk cycle deband\n# Kommentar',
 			'dialog.confirmAction' => 'Aktion bestätigen',
 			'profiles.addPlezyProfile' => 'Plezy-Profil hinzufügen',
 			'profiles.switchingProfile' => 'Profil wird gewechselt…',
@@ -4010,11 +4016,11 @@ extension on TranslationsDe {
 			'libraries.sortBy' => 'Sortieren nach',
 			'libraries.filters' => 'Filter',
 			'libraries.confirmActionMessage' => 'Aktion wirklich durchführen?',
+			_ => null,
+		} ?? switch (path) {
 			'libraries.showLibrary' => 'Mediathek anzeigen',
 			'libraries.hideLibrary' => 'Mediathek ausblenden',
 			'libraries.libraryOptions' => 'Mediatheksoptionen',
-			_ => null,
-		} ?? switch (path) {
 			'libraries.content' => 'Mediatheksinhalt',
 			'libraries.selectLibrary' => 'Mediathek auswählen',
 			'libraries.filtersWithCount' => ({required Object count}) => 'Filter (${count})',
@@ -4524,11 +4530,11 @@ extension on TranslationsDe {
 			'downloads.cancelledDownloadTitle' => 'Abgebrochener Download',
 			'downloads.cancelledDownloadMessage' => 'Dieser Download wurde abgebrochen. Was möchtest du tun?',
 			'downloads.allEpisodesAlreadyDownloaded' => 'Alle Episoden sind bereits heruntergeladen',
+			_ => null,
+		} ?? switch (path) {
 			'downloads.resumeDownload' => 'Download fortsetzen',
 			'downloads.cancelledDownload' => 'Abgebrochener Download',
 			'downloads.syncingFile' => ({required Object file, required Object status}) => '${file} (${status} wird synchronisiert)',
-			_ => null,
-		} ?? switch (path) {
 			'downloads.downloadedFileClickToComplete' => ({required Object file}) => '${file} heruntergeladen — zum Abschließen klicken',
 			'downloads.partialDownloadClickToComplete' => 'Teilweise heruntergeladen — zum Abschließen klicken',
 			'downloads.deleting' => 'Wird gelöscht …',

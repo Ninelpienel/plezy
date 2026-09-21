@@ -5,6 +5,58 @@ extension _PlexVideoControlsKeyEventMethods on _PlexVideoControlsState {
     _keyboardService = await KeyboardShortcutsService.getInstance();
   }
 
+  /// The mpv key [event] hands to the user's `input.conf`, or null when the
+  /// key stays with Plezy (#2409).
+  ///
+  /// `input.conf` wins every key it binds, over Plezy's shortcuts included.
+  /// Three things stay with Plezy regardless, because taking them would strand
+  /// the viewer: Back/Escape (the way out of the player), keys typed into a
+  /// text field or an open sheet, and the keys that move focus inside the
+  /// visible controls while one of them is focused.
+  ///
+  /// A key is claimed on its down event and stays claimed through its repeats
+  /// and its up event, so Plezy never handles half of a press mpv saw. Pure:
+  /// the claim is recorded by [_forwardToInputConf].
+  String? _inputConfKeyFor(KeyEvent event) {
+    if (event is! KeyDownEvent) return _inputConfHeldKeys[event.physicalKey];
+
+    final bindings = switch (widget.player) {
+      final MpvInputBindingsSource source => source.inputBindings,
+      _ => MpvInputBindings.empty,
+    };
+    if (bindings.isEmpty) return null;
+    if (classifyPlayerNavigationKey(event, isAppleTV: false) != PlayerNavigationKey.none) return null;
+    if (isTextEditingFocused() || (OverlaySheetController.maybeOf(context)?.isOpen ?? false)) return null;
+
+    final key = event.logicalKey;
+    final movesFocusInChrome = key.isDpadDirection || key.isSelectKey || key == LogicalKeyboardKey.tab;
+    if (movesFocusInChrome && _showControls && !_focusNode.hasPrimaryFocus) return null;
+
+    final keyboard = HardwareKeyboard.instance;
+    final name = mpvKeyNameFor(
+      event,
+      shift: keyboard.isShiftPressed,
+      control: keyboard.isControlPressed,
+      alt: keyboard.isAltPressed,
+      meta: keyboard.isMetaPressed,
+    );
+    return name != null && bindings.binds(name) ? name : null;
+  }
+
+  /// Sends [name], the answer [_inputConfKeyFor] gave for [event], to mpv.
+  KeyEventResult _forwardToInputConf(KeyEvent event, String name) {
+    if (event is KeyUpEvent) {
+      _inputConfHeldKeys.remove(event.physicalKey);
+      return KeyEventResult.handled;
+    }
+    _inputConfHeldKeys[event.physicalKey] = name;
+    if (_showControls) _restartHideTimerForCurrentPlaybackState();
+    widget.player.command(['keypress', name]).catchError((Object e, StackTrace st) {
+      appLogger.w('mpv did not accept the input.conf key $name', error: e, stackTrace: st);
+    });
+    return KeyEventResult.handled;
+  }
+
   void _showScreenshotToast() {
     widget.toastController.show(Symbols.photo_camera_rounded, t.videoControls.screenshotSaved);
   }
@@ -178,6 +230,17 @@ extension _PlexVideoControlsKeyEventMethods on _PlexVideoControlsState {
       return false;
     }
 
+    // input.conf keys go to mpv ahead of every Plezy shortcut, play/pause
+    // included. With focus inside the controls the focus path forwards them;
+    // this handler only covers focus that has drifted away.
+    final inputConfKey = _inputConfKeyFor(event);
+    if (inputConfKey != null) {
+      if (_focusNode.hasFocus) return false;
+      _forwardToInputConf(event, inputConfKey);
+      if (event is KeyDownEvent) _focusNode.requestFocus(); // self-heal focus
+      return true;
+    }
+
     // Only handle when video player navigation is disabled (desktop mode without D-pad nav)
     if (videoPlayerNavigationPreference()) return false;
 
@@ -215,6 +278,9 @@ extension _PlexVideoControlsKeyEventMethods on _PlexVideoControlsState {
       return navigationResult;
     }
     if (navigationKey != PlayerNavigationKey.none) return KeyEventResult.ignored;
+
+    final inputConfKey = _inputConfKeyFor(event);
+    if (inputConfKey != null) return _forwardToInputConf(event, inputConfKey);
 
     // Releasing a key ends its seek burst, before the KeyUp is consumed below.
     // Two independent reasons to fire:

@@ -2577,6 +2577,15 @@ class Translations$mpvConfig$en {
 
 	/// en: 'vo, gpu-context and gpu-api are ignored on Linux: embedded video always renders through vo=libmpv on the video plane, and gpu-next (which compute shaders like ArtCNN need) cannot run embedded.'
 	String get embeddedVoHint => 'vo, gpu-context and gpu-api are ignored on Linux: embedded video always renders through vo=libmpv on the video plane, and gpu-next (which compute shaders like ArtCNN need) cannot run embedded.';
+
+	/// en: 'input.conf'
+	String get inputConfTitle => 'input.conf';
+
+	/// en: 'mpv key bindings. A key bound here overrides Plezy's shortcut for it'
+	String get inputConfDescription => 'mpv key bindings. A key bound here overrides Plezy\'s shortcut for it';
+
+	/// en: 'i script-binding stats/display-stats k cycle deband # comment'
+	String get inputConfPlaceholder => 'i script-binding stats/display-stats\nk cycle deband\n# comment';
 }
 
 // Path: dialog
@@ -7916,6 +7925,9 @@ extension on Translations {
 			'mpvConfig.addLine' => 'Add line',
 			'mpvConfig.removeLine' => 'Remove line',
 			'mpvConfig.embeddedVoHint' => 'vo, gpu-context and gpu-api are ignored on Linux: embedded video always renders through vo=libmpv on the video plane, and gpu-next (which compute shaders like ArtCNN need) cannot run embedded.',
+			'mpvConfig.inputConfTitle' => 'input.conf',
+			'mpvConfig.inputConfDescription' => 'mpv key bindings. A key bound here overrides Plezy\'s shortcut for it',
+			'mpvConfig.inputConfPlaceholder' => 'i script-binding stats/display-stats\nk cycle deband\n# comment',
 			'dialog.confirmAction' => 'Confirm Action',
 			'profiles.addPlezyProfile' => 'Add Plezy profile',
 			'profiles.switchingProfile' => 'Switching profile…',
@@ -8113,11 +8125,11 @@ extension on Translations {
 			'libraries.sort' => 'Sort',
 			'libraries.sortBy' => 'Sort By',
 			'libraries.filters' => 'Filters',
+			_ => null,
+		} ?? switch (path) {
 			'libraries.confirmActionMessage' => 'Are you sure you want to perform this action?',
 			'libraries.showLibrary' => 'Show library',
 			'libraries.hideLibrary' => 'Hide library',
-			_ => null,
-		} ?? switch (path) {
 			'libraries.libraryOptions' => 'Library options',
 			'libraries.content' => 'library content',
 			'libraries.selectLibrary' => 'Select library',
@@ -8627,11 +8639,11 @@ extension on Translations {
 			'downloads.storageUnavailable' => 'Downloads stopped because available storage could not be checked. Check the download location, then retry.',
 			'downloads.episodesQueued' => ({required Object count}) => '${count} episodes queued for download',
 			'downloads.downloadDeleted' => 'Download deleted',
+			_ => null,
+		} ?? switch (path) {
 			'downloads.deleteConfirm' => ({required Object title}) => 'Delete "${title}" from this device?',
 			'downloads.cancelledDownloadTitle' => 'Canceled Download',
 			'downloads.cancelledDownloadMessage' => 'This download was canceled. What would you like to do?',
-			_ => null,
-		} ?? switch (path) {
 			'downloads.allEpisodesAlreadyDownloaded' => 'All episodes already downloaded',
 			'downloads.resumeDownload' => 'Resume download',
 			'downloads.cancelledDownload' => 'Canceled download',

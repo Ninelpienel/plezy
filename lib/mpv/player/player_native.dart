@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import '../../services/settings_service.dart';
 import '../../services/mpv_config_file.dart';
+import '../mpv_input_bindings.dart';
 import '../mpv_owned_options.dart';
 import '../../utils/app_logger.dart';
 import '../models.dart';
@@ -25,7 +26,7 @@ typedef _AudioStateRequest = ({
 typedef _AudioStateGenerations = ({int passthrough, int normalization, int downmix, int rate});
 
 /// MPV-backed player for platforms where AetherEngine is not the native route.
-class PlayerNative extends PlayerBase {
+class PlayerNative extends PlayerBase implements MpvInputBindingsSource {
   /// Video player on the default mpv channels/core.
   ///
   /// [hardwareDecoding] mirrors the session's hardware-decoding setting so
@@ -121,6 +122,13 @@ class PlayerNative extends PlayerBase {
   /// apply the config itself (see MpvConfigFile) - on the platforms that do
   /// not pass a config directory, and when writing it failed.
   bool get loadedConfigFile => _loadedConfigFile;
+
+  MpvInputBindings _inputBindings = MpvInputBindings.empty;
+
+  /// Empty unless [loadedConfigFile]. The player controls forward these keys
+  /// to mpv instead of handling them (#2409).
+  @override
+  MpvInputBindings get inputBindings => _inputBindings;
 
   @override
   final MethodChannel methodChannel;
@@ -252,12 +260,14 @@ class PlayerNative extends PlayerBase {
       // mpv_initialize), so profiles, their conditions and option aliases work
       // the way they do in an mpv or Plex HTPC install. Null means no config
       // directory, which is how every build before this started.
-      final configDir = audioOnly
+      final configDirectory = audioOnly
           ? null
           : MpvConfigFile.materializeSync(
               withheldOptions: usesLinuxVideoPlane ? appOwnedMpvProperties : appInterceptedMpvProperties,
             );
-      _loadedConfigFile = configDir != null;
+      final configDir = configDirectory?.path;
+      _loadedConfigFile = configDirectory != null;
+      _inputBindings = configDirectory?.inputBindings ?? MpvInputBindings.empty;
       final result = await invoke<Object>('initialize', {
         if (!audioOnly) 'hardwareDecoding': _hardwareDecoding,
         'configDir': ?configDir,

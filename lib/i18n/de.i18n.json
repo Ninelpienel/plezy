@@ -878,7 +878,10 @@
     "lineHint": "option=value",
     "addLine": "Zeile hinzufügen",
     "removeLine": "Zeile entfernen",
-    "embeddedVoHint": "vo, gpu-context und gpu-api werden unter Linux ignoriert: eingebettetes Video wird immer über vo=libmpv auf der Videoebene gerendert, und gpu-next (das Compute-Shader wie ArtCNN benötigen) kann nicht eingebettet ausgeführt werden."
+    "embeddedVoHint": "vo, gpu-context und gpu-api werden unter Linux ignoriert: eingebettetes Video wird immer über vo=libmpv auf der Videoebene gerendert, und gpu-next (das Compute-Shader wie ArtCNN benötigen) kann nicht eingebettet ausgeführt werden.",
+    "inputConfTitle": "input.conf",
+    "inputConfDescription": "mpv-Tastenbelegungen. Eine hier belegte Taste ersetzt Plezys Tastenkürzel dafür",
+    "inputConfPlaceholder": "i script-binding stats/display-stats\nk cycle deband\n# Kommentar"
   },
   "dialog": {
     "confirmAction": "Aktion bestätigen"

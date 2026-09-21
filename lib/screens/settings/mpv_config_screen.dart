@@ -25,9 +25,15 @@ import '../../widgets/focusable_list_tile.dart';
 import '../../widgets/settings_builder.dart';
 import '../../widgets/settings_section.dart';
 import 'mpv_config_line_editor.dart';
+import 'mpv_config_line_numbers.dart';
 
 class MpvConfigScreen extends StatefulWidget {
-  const MpvConfigScreen({super.key});
+  const MpvConfigScreen({super.key}) : inputConf = false;
+
+  /// The same editor for `input.conf` (#2409): no presets, no Linux vo hint.
+  const MpvConfigScreen.inputConf({super.key}) : inputConf = true;
+
+  final bool inputConf;
 
   @override
   State<MpvConfigScreen> createState() => _MpvConfigScreenState();
@@ -36,9 +42,9 @@ class MpvConfigScreen extends StatefulWidget {
 class _MpvConfigScreenState extends State<MpvConfigScreen> with ListenableBindingsMixin, ControllerDisposerMixin {
   SettingsService get _settingsService => SettingsService.instance;
 
-  late final TextEditingController _textController = createTextEditingController(
-    text: _settingsService.read(SettingsService.mpvConfigText),
-  );
+  StringPref get _pref => widget.inputConf ? SettingsService.mpvInputConfText : SettingsService.mpvConfigText;
+
+  late final TextEditingController _textController = createTextEditingController(text: _settingsService.read(_pref));
   final _savePresetFocusNode = FocusNode();
   final _textFieldFocusNode = FocusNode();
   final _saveDebouncer = Debouncer(const Duration(milliseconds: 400));
@@ -60,7 +66,7 @@ class _MpvConfigScreenState extends State<MpvConfigScreen> with ListenableBindin
     // Keep a clean editor synchronized with imports, reset, and other
     // settings producers without allowing a completed local write to replace
     // a newer queued edit.
-    bindEffect<String>(SettingsService.mpvConfigText, _handlePersistedText, fireImmediately: false);
+    bindEffect<String>(_pref, _handlePersistedText, fireImmediately: false);
   }
 
   @override
@@ -75,6 +81,10 @@ class _MpvConfigScreenState extends State<MpvConfigScreen> with ListenableBindin
     _textFieldFocusNode.dispose();
     super.dispose();
   }
+
+  /// The presets card is where Back and Down leave the editor to; the
+  /// `input.conf` editor has none, so those keys leave the screen instead.
+  bool get _canFocusPresets => !widget.inputConf && _savePresetFocusNode.canRequestFocus;
 
   bool get _hasUnsavedWork => _pendingSave != null || _activeSave != null || _drainFuture != null;
 
@@ -144,7 +154,7 @@ class _MpvConfigScreenState extends State<MpvConfigScreen> with ListenableBindin
       _pendingSave = null;
       _activeSave = next;
       try {
-        await _settingsService.write(SettingsService.mpvConfigText, next.text);
+        await _settingsService.write(_pref, next.text);
       } catch (error, stackTrace) {
         _pendingSave ??= next;
         _activeSave = null;
@@ -236,21 +246,21 @@ class _MpvConfigScreenState extends State<MpvConfigScreen> with ListenableBindin
             if (didPop || _isLeaving) return;
             if (BackKeyCoordinator.consumeIfHandled()) return;
             BackKeyUpSuppressor.suppressBackUntilKeyUp();
-            if (_textFieldFocusNode.hasFocus && _savePresetFocusNode.canRequestFocus) {
+            if (_textFieldFocusNode.hasFocus && _canFocusPresets) {
               _savePresetFocusNode.requestFocus();
             } else {
               unawaited(_flushAndPop());
             }
           },
           child: FocusedScrollScaffold(
-            title: Text(t.screens.mpvConfig),
+            title: Text(widget.inputConf ? t.mpvConfig.inputConfTitle : t.screens.mpvConfig),
             slivers: [
               SliverPadding(
                 padding: const EdgeInsets.all(16),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     _buildConfigEditor(),
-                    if (Platform.isLinux) ...[
+                    if (Platform.isLinux && !widget.inputConf) ...[
                       const SizedBox(height: 8),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -262,8 +272,7 @@ class _MpvConfigScreenState extends State<MpvConfigScreen> with ListenableBindin
                         ),
                       ),
                     ],
-                    const SizedBox(height: 16),
-                    _buildPresetsCard(),
+                    if (!widget.inputConf) ...[const SizedBox(height: 16), _buildPresetsCard()],
                     const SizedBox(height: 24),
                   ]),
                 ),
@@ -297,7 +306,7 @@ class _MpvConfigScreenState extends State<MpvConfigScreen> with ListenableBindin
         // Suppress the KeyUp so it doesn't reach handleBackKeyNavigation
         // on the new focus chain after focus moves away from the text field.
         if (event.logicalKey.isBackKey) {
-          if (!_savePresetFocusNode.canRequestFocus) {
+          if (!_canFocusPresets) {
             return KeyEventResult.ignored;
           }
           if (event is KeyDownEvent) {
@@ -329,27 +338,44 @@ class _MpvConfigScreenState extends State<MpvConfigScreen> with ListenableBindin
         }
         if (event.logicalKey.isDownKey && event.isActionable) {
           final sel = _textController.selection;
-          if (sel.isValid && _textController.text.indexOf('\n', sel.extentOffset) == -1) {
+          if (_canFocusPresets && sel.isValid && _textController.text.indexOf('\n', sel.extentOffset) == -1) {
             _savePresetFocusNode.requestFocus();
             return KeyEventResult.handled;
           }
         }
         return KeyEventResult.ignored;
       },
-      child: FocusableTextField(
-        controller: _textController,
-        focusNode: _textFieldFocusNode,
-        keyboardType: TextInputType.multiline,
-        maxLines: null,
-        minLines: 12,
-        decoration: InputDecoration(
-          hintText: t.mpvConfig.configPlaceholder,
-          border: const OutlineInputBorder(),
-          contentPadding: const EdgeInsets.all(12),
+      child: _withLineNumbers(
+        FocusableTextField(
+          controller: _textController,
+          focusNode: _textFieldFocusNode,
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+          minLines: 12,
+          decoration: InputDecoration(
+            hintText: widget.inputConf ? t.mpvConfig.inputConfPlaceholder : t.mpvConfig.configPlaceholder,
+            border: const OutlineInputBorder(),
+            contentPadding: _editorPadding,
+          ),
+          style: _editorStyle,
+          onChanged: _queueTextSave,
         ),
-        style: _editorStyle,
-        onChanged: _queueTextSave,
       ),
+    );
+  }
+
+  static const _editorPadding = EdgeInsets.all(12);
+
+  /// Desktop only: a config pasted from an mpv install is edited there, and
+  /// the numbers are how mpv's own log messages point into it. Phones keep
+  /// the plain field.
+  Widget _withLineNumbers(Widget field) {
+    if (!PlatformDetector.isDesktopOS()) return field;
+    return MpvConfigLineNumbers(
+      controller: _textController,
+      style: _editorStyle,
+      contentPadding: _editorPadding,
+      child: field,
     );
   }
 

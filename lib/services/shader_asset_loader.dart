@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 
 import '../models/shader_preset.dart';
 import '../utils/app_logger.dart';
+import '../utils/platform_detector.dart';
 
 /// Utility class for loading GLSL shader assets for MPV video enhancement.
 ///
@@ -21,9 +22,11 @@ class ShaderAssetLoader {
 
   /// Extensions accepted on import. mpv reads a shader by content, not by
   /// name - `.hook` is what the prescaler and Anime4K families ship as, and
-  /// refusing it only taught users to rename the file themselves (#2408).
+  /// refusing it only taught desktop users to rename the file themselves
+  /// (#2408). TV and mobile keep the `.glsl`-only import they always had.
   /// The stored copy keeps the `.glsl` name every build already recognises.
-  static const Set<String> importableShaderExtensions = {'.glsl', '.hook'};
+  static Set<String> get importableShaderExtensions =>
+      PlatformDetector.isDesktopOS() ? const {'.glsl', '.hook'} : const {'.glsl'};
   static final Map<String, String> _verifiedBuiltInShaderPaths = {};
   static final Map<String, Future<String?>> _inFlightBuiltInShaders = {};
   static int _cacheGeneration = 0;
@@ -241,7 +244,11 @@ class ShaderAssetLoader {
   /// Returns the stored file name (UUID-based to avoid collisions).
   static Future<String> importCustomShader(String sourcePath, {void Function()? checkCurrent}) async {
     if (!importableShaderExtensions.contains(path.extension(sourcePath).toLowerCase())) {
-      throw ArgumentError.value(sourcePath, 'sourcePath', 'Custom shaders must be a .glsl or .hook file');
+      throw ArgumentError.value(
+        sourcePath,
+        'sourcePath',
+        'Custom shaders must be a ${importableShaderExtensions.join(' or ')} file',
+      );
     }
 
     final customDir = await _getCustomShaderDirectory();

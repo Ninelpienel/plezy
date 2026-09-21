@@ -23,6 +23,7 @@ import 'saf_storage_service.dart';
 import 'scoped_player_prefs.dart';
 import 'settings_mutation_service.dart';
 import 'settings_service.dart';
+import 'shader_asset_loader.dart';
 import 'shader_service.dart';
 import 'shortcut_action.dart';
 import 'update_service.dart';
@@ -438,7 +439,11 @@ class AgentSettingsCommands {
         {
           'oneOf': [
             {
-              'import': {'fileName': 'safe .glsl or .hook filename', 'name': 'display name', 'base64': 'file bytes'},
+              'import': {
+                'fileName': 'safe ${ShaderAssetLoader.importableShaderExtensions.join(' or ')} filename',
+                'name': 'display name',
+                'base64': 'file bytes',
+              },
             },
             {'delete': 'custom preset id'},
           ],
@@ -776,10 +781,13 @@ class AgentSettingsCommands {
         final input = _object(map['import'], {'name', 'fileName', 'base64'});
         final name = agentString(input, 'name').trim();
         final fileName = agentString(input, 'fileName');
+        final extensions = ShaderAssetLoader.importableShaderExtensions;
+        final extension = path.extension(fileName).toLowerCase();
         if (fileName.length > 128 ||
             fileName.startsWith('.') ||
-            !RegExp(r'^[^<>:"/\\|?*\x00-\x1f]+\.(glsl|hook)$', caseSensitive: false).hasMatch(fileName)) {
-          throw const FormatException('Expected a safe .glsl or .hook filename');
+            !RegExp(r'^[^<>:"/\\|?*\x00-\x1f]+$').hasMatch(fileName) ||
+            !extensions.contains(extension)) {
+          throw FormatException('Expected a safe ${extensions.join(' or ')} filename');
         }
         final encoded = agentString(input, 'base64');
         if (encoded.length > ((maxResourceBytes + 2) ~/ 3) * 4) throw const FormatException('Shader too large');

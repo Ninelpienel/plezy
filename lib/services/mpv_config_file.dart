@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../mpv/mpv_input_bindings.dart';
 import '../utils/app_logger.dart';
 import 'settings_service.dart';
 
@@ -74,13 +75,17 @@ abstract final class MpvConfigFile {
   @visibleForTesting
   static void resetForTesting() => _directoryPath = null;
 
-  /// Writes both files and returns the directory for `config-dir`, or null
-  /// when the directory is not ready or a write failed - the caller then
-  /// starts mpv without a config directory and applies the config the old
-  /// way, which is what every build before this did.
+  /// Writes both files and returns the directory for `config-dir`, together
+  /// with the keys the written `input.conf` binds, or null when the directory
+  /// is not ready or a write failed - the caller then starts mpv without a
+  /// config directory and applies the config the old way, which is what every
+  /// build before this did.
+  ///
+  /// The bindings are parsed from exactly the text written here, so they
+  /// match what mpv loads even if the setting is edited during playback.
   ///
   /// Synchronous on purpose (see [prepare]); the files are a few kilobytes.
-  static String? materializeSync({required Set<String> withheldOptions}) {
+  static ({String path, MpvInputBindings inputBindings})? materializeSync({required Set<String> withheldOptions}) {
     final directoryPath = _directoryPath;
     if (!isSupported || directoryPath == null) return null;
     try {
@@ -88,11 +93,10 @@ abstract final class MpvConfigFile {
       if (settings == null) return null;
 
       final config = sanitize(settings.read(SettingsService.mpvConfigText), withheldOptions);
+      final inputConf = settings.read(SettingsService.mpvInputConfText);
       File(p.join(directoryPath, mpvConfName)).writeAsStringSync(config, flush: true);
-      File(
-        p.join(directoryPath, inputConfName),
-      ).writeAsStringSync(settings.read(SettingsService.mpvInputConfText), flush: true);
-      return directoryPath;
+      File(p.join(directoryPath, inputConfName)).writeAsStringSync(inputConf, flush: true);
+      return (path: directoryPath, inputBindings: MpvInputBindings.parse(inputConf));
     } catch (e, st) {
       appLogger.w('Could not write the mpv config directory', error: e, stackTrace: st);
       return null;

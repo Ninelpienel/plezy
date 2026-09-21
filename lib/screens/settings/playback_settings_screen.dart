@@ -8,6 +8,7 @@ import '../../models/audio_quality_preset.dart';
 import '../../models/transcode_quality_preset.dart';
 import '../../models/player_setting_scope.dart';
 import '../../utils/quality_preset_labels.dart';
+import '../../services/mpv_config_file.dart';
 import '../../services/settings_service.dart';
 import '../../utils/platform_detector.dart';
 import '../../widgets/setting_tile.dart';
@@ -58,6 +59,8 @@ class PlaybackSettingsScreen extends StatelessWidget {
                 if (Platform.isAndroid) _playerBackendSelector(),
                 if (PlatformDetector.supportsExternalPlayers()) _externalPlayerTile(),
                 if (!exoActive) _mpvConfigTile(),
+                // Only the desktop cores load input.conf and receive its keys.
+                if (!exoActive && MpvConfigFile.isSupported) _mpvInputConfTile(),
                 _hardwareDecodingTile(),
                 if (exoActive) _playbackBufferTile(),
                 if (exoActive) _tunneledPlaybackTile(),
@@ -628,5 +631,12 @@ class PlaybackSettingsScreen extends StatelessWidget {
     title: t.mpvConfig.title,
     subtitle: t.mpvConfig.description,
     destinationBuilder: (_) => const MpvConfigScreen(),
+  );
+
+  Widget _mpvInputConfTile() => SettingNavigationTile(
+    icon: Symbols.keyboard_rounded,
+    title: t.mpvConfig.inputConfTitle,
+    subtitle: t.mpvConfig.inputConfDescription,
+    destinationBuilder: (_) => const MpvConfigScreen.inputConf(),
   );
 }

@@ -878,7 +878,10 @@
     "lineHint": "option=value",
     "addLine": "Add line",
     "removeLine": "Remove line",
-    "embeddedVoHint": "vo, gpu-context and gpu-api are ignored on Linux: embedded video always renders through vo=libmpv on the video plane, and gpu-next (which compute shaders like ArtCNN need) cannot run embedded."
+    "embeddedVoHint": "vo, gpu-context and gpu-api are ignored on Linux: embedded video always renders through vo=libmpv on the video plane, and gpu-next (which compute shaders like ArtCNN need) cannot run embedded.",
+    "inputConfTitle": "input.conf",
+    "inputConfDescription": "mpv key bindings. A key bound here overrides Plezy's shortcut for it",
+    "inputConfPlaceholder": "i script-binding stats/display-stats\nk cycle deband\n# comment"
   },
   "dialog": {
     "confirmAction": "Confirm Action"

@@ -38,6 +38,7 @@ import 'package:window_manager/window_manager.dart';
 import '../../mixins/listenable_bindings_mixin.dart';
 import '../../mixins/mounted_set_state_mixin.dart';
 import '../../mpv/mpv.dart';
+import '../../mpv/mpv_input_bindings.dart';
 import '../overlay_sheet.dart';
 import '../../focus/dpad_navigator.dart';
 import '../../focus/focus_navigation_intent.dart';
@@ -847,6 +848,10 @@ class _PlexVideoControlsState extends State<PlexVideoControls>
 
   /// Latched for the whole Back press; see [_handleLocalPlayerNavigationKeyEvent].
   bool _skipMarkerOwnsBackPress = false;
+
+  /// Keys currently held that went to mpv's `input.conf` on their press,
+  /// with the name mpv got; see [_inputConfKeyFor].
+  final Map<PhysicalKeyboardKey, String> _inputConfHeldKeys = {};
   late List<MediaMarker> _markers = widget.initialMarkers ?? [];
   late bool _markersLoaded = widget.initialMarkers != null;
   // Playback state subscription for auto-hide timer
