@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Directory, Platform, ProcessInfo;
+import 'dart:math' as math;
 import 'dart:ui' show AppExitResponse;
 import 'package:flutter/foundation.dart';
 // ignore: depend_on_referenced_packages
@@ -41,6 +42,7 @@ import 'services/macos_window_service.dart';
 import 'services/native_window_service.dart';
 import 'services/fullscreen_state_manager.dart';
 import 'services/htpc_mode.dart';
+import 'theme/ui_text_scale.dart';
 import 'services/settings_service.dart';
 import 'services/agent_control_service.dart';
 import 'widgets/agent_control_scope.dart';
@@ -1894,9 +1896,14 @@ class _AppShell extends StatelessWidget {
 /// interface grew.
 Widget rootShell(Widget? child) {
   return FormFactorScale(
-    child: ScaffoldMessenger(
-      key: rootScaffoldMessengerKey,
-      child: Scaffold(backgroundColor: Colors.transparent, body: child),
+    // Inside the form-factor scale, so the text preference reads the surface
+    // this build actually renders into, and above the messenger so a snackbar
+    // is sized like the rest of the interface.
+    child: UiTextScaleScope(
+      child: ScaffoldMessenger(
+        key: rootScaffoldMessengerKey,
+        child: Scaffold(backgroundColor: Colors.transparent, body: child),
+      ),
     ),
   );
 }
@@ -1919,9 +1926,16 @@ class FormFactorScale extends StatelessWidget {
     // Keep the existing Apple TV path independent of settings so its 2×
     // behavior and overscan handling remain unchanged.
     if (PlatformDetector.isAppleTV()) {
-      return _scaledSurface(child: child, scale: _appleTvScale, zeroInsets: true);
+      return _scaledSurface(child: child, scaleFor: (_) => _appleTvScale, zeroInsets: true);
     }
-    if (!PlatformDetector.isAutomotive()) return child;
+    if (!PlatformDetector.isAutomotive()) {
+      if (!PlatformDetector.isDesktopOS()) return child;
+      return SettingValueBuilder<bool>(
+        pref: SettingsService.htpcMode,
+        builder: (context, htpc, _) =>
+            htpc ? _scaledSurface(child: child, scaleFor: _htpcScale, zeroInsets: true) : child,
+      );
+    }
 
     // Car system bars can sit on the left or right, are opaque, and may be
     // impossible to hide (OEM policy). Nothing is worth drawing under them,
@@ -1931,13 +1945,28 @@ class FormFactorScale extends StatelessWidget {
     final insetChild = SafeArea(top: false, bottom: false, child: child);
     return SettingValueBuilder<double>(
       pref: SettingsService.automotiveUiScale,
-      builder: (context, scale, _) => _scaledSurface(child: insetChild, scale: scale, zeroInsets: false),
+      builder: (context, scale, _) => _scaledSurface(child: insetChild, scaleFor: (_) => scale, zeroInsets: false),
     );
   }
 
-  Widget _scaledSurface({required Widget child, required double scale, required bool zeroInsets}) {
+  /// The logical height an Android TV box lays out at (1080p at xhdpi), which
+  /// is what the TV layout was tuned on.
+  static const double _htpcLogicalHeight = 540;
+
+  /// HTPC renders the TV layout into the same 540-high logical surface an
+  /// Android TV uses, whatever the monitor and Windows scaling: a sidebar, a
+  /// card or a line of text then covers the same share of the screen on the
+  /// PC as on the Shield. Never shrinks below 1:1 on a small window.
+  static double _htpcScale(BoxConstraints constraints) => math.max(1.0, constraints.maxHeight / _htpcLogicalHeight);
+
+  Widget _scaledSurface({
+    required Widget child,
+    required double Function(BoxConstraints) scaleFor,
+    required bool zeroInsets,
+  }) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final scale = scaleFor(constraints);
         final logicalSize = Size(constraints.maxWidth / scale, constraints.maxHeight / scale);
         final outerQ = MediaQuery.of(context);
         // tvOS reports conservative overscan insets (~60pt top/bottom,

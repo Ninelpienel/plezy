@@ -148,9 +148,17 @@ class _VideoState extends State<Video> {
     final renderBox = context.findRenderObject() as RenderBox?;
     if (renderBox == null || !renderBox.hasSize) return;
 
-    final position = renderBox.localToGlobal(Offset.zero);
-    final size = renderBox.size;
-    final dpr = MediaQuery.devicePixelRatioOf(context);
+    // Measured in the window's coordinates, through every ancestor transform.
+    // The HTPC view renders the whole app into a smaller logical surface and
+    // scales it up (FormFactorScale): there the video box's own size is in
+    // the scaled units while its global position is not, and the scaled
+    // MediaQuery reports a device pixel ratio that already includes the
+    // scale. Dividing the scale back out gives the window's real ratio.
+    final globalRect = MatrixUtils.transformRect(renderBox.getTransformTo(null), Offset.zero & renderBox.size);
+    final position = globalRect.topLeft;
+    final size = globalRect.size;
+    final surfaceScale = renderBox.size.width > 0 ? globalRect.width / renderBox.size.width : 1.0;
+    final dpr = MediaQuery.devicePixelRatioOf(context) / surfaceScale;
 
     // Rounded outward, the same way the native SetRect biases: it floors the
     // position and rounds the buffer size up so the plane always covers at
