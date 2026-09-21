@@ -555,6 +555,65 @@ Future<void> expectSanitizedSubtitleColorsOnTheWire(WidgetTester tester) async {
   );
 }
 
+/// mpv.conf has the last word on every option it sets. With the config
+/// directory mpv applies the file before the startup writes, so each app
+/// default for an option the file sets must stay off the wire entirely - here
+/// the only write of each carries the file's value, from the replay this
+/// harness's property path still runs. A plain option the file leaves alone
+/// keeps the app's default.
+Future<void> expectMpvConfigOptionsAreNotOverwritten(WidgetTester tester) async {
+  await SettingsService.instance.write(
+    SettingsService.mpvConfigText,
+    'sub-font-size=52\n'
+    'hwdec=d3d11va\n'
+    'screenshot-directory=~~desktop/\n'
+    '[Subs]\n'
+    'profile-cond=true\n'
+    'sub-bold=yes\n'
+    'volume-max=100\n',
+  );
+  final calls = <MethodCall>[];
+  final eventCalls = <MethodCall>[];
+
+  await withMockPlayerChannels(
+    methodChannelName: 'com.plezy/mpv_player',
+    eventChannelName: 'com.plezy/mpv_player/events',
+    methodHandler: (call) async {
+      calls.add(call);
+      return call.method == 'initialize' ? true : null;
+    },
+    eventHandler: (call) async {
+      eventCalls.add(call);
+      return null;
+    },
+    testBody: () async {
+      await _mountPlayerScreen(tester, 'mpv.conf keeps its options video');
+      await pumpUntil(
+        tester,
+        () => _propertyWrites(calls).contains('volume-max') && _propertyWrites(calls).contains('sub-color'),
+        describe: () => 'writes=${_propertyWrites(calls)} calls=${calls.map((c) => c.method).toList()}',
+      );
+
+      expect(_valueWrites(calls, 'sub-font-size'), ['52']);
+      expect(_valueWrites(calls, 'hwdec'), ['d3d11va']);
+      expect(_valueWrites(calls, 'screenshot-directory'), ['~~desktop/']);
+      expect(_valueWrites(calls, 'volume-max'), ['100']);
+      // Set inside a profile: still the file's, so the app keeps out of it.
+      expect(_valueWrites(calls, 'sub-bold'), ['yes']);
+      // Not in the file: the app's own default still goes out.
+      expect(_valueWrites(calls, 'sub-color'), hasLength(1));
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await pumpUntil(
+        tester,
+        () => calls.any((call) => call.method == 'dispose') && eventCalls.any((call) => call.method == 'cancel'),
+        describe: () =>
+            'calls=${calls.map((c) => c.method).toList()} events=${eventCalls.map((c) => c.method).toList()}',
+      );
+    },
+  );
+}
+
 /// The negative side of [expectStartupSurvivesHdrRefusal]: with the Linux video
 /// path forced off, the same refusal must abort initialization rather than be
 /// swallowed, so `audio-delay` never follows it and the stored preference is

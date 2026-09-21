@@ -188,6 +188,10 @@ void MpvPlayerPlugin::HandleMethodCall(
       if (it != map.end() && std::holds_alternative<std::string>(it->second)) {
         player_->SetConfigDir(std::get<std::string>(it->second));
       }
+      const auto level_it = map.find(flutter::EncodableValue("logLevel"));
+      if (level_it != map.end() && std::holds_alternative<std::string>(level_it->second)) {
+        player_->SetInitialLogLevel(std::get<std::string>(level_it->second));
+      }
     }
     bool success = player_->Initialize(view);
 

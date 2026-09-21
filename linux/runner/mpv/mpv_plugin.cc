@@ -1131,6 +1131,10 @@ static void mpv_plugin_handle_method_call(FlMethodChannel* channel, FlMethodCall
         if (config_dir != nullptr && fl_value_get_type(config_dir) == FL_VALUE_TYPE_STRING) {
           self->player->SetConfigDir(fl_value_get_string(config_dir));
         }
+        FlValue* log_level = fl_value_lookup_string(args, "logLevel");
+        if (log_level != nullptr && fl_value_get_type(log_level) == FL_VALUE_TYPE_STRING) {
+          self->player->SetInitialLogLevel(fl_value_get_string(log_level));
+        }
       }
 
       std::string error;

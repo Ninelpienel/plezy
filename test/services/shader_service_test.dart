@@ -47,8 +47,36 @@ void main() {
     await service.applyPreset(preset);
 
     expect(player.commands.where((command) => command.length > 2 && command[2] == 'append'), isEmpty);
-    expect(player.commands.single, ['change-list', 'glsl-shaders', 'clr', '']);
+    expect(player.commands, isEmpty, reason: 'nothing of the app was in the chain, so nothing is removed');
     expect(await sentinel.readAsString(), 'sentinel');
+  });
+
+  // mpv.conf's glsl-shader lines sit in the same chain; a `clr` at playback
+  // start used to wipe them before the first frame.
+  group('the user\'s own shaders', () {
+    test('are never cleared: applying no preset sends nothing', () async {
+      final player = _RecordingPlayer();
+
+      await ShaderService(player).applyPreset(ShaderPreset.none);
+
+      expect(player.commands, isEmpty);
+    });
+
+    test('switching presets removes only the previous preset\'s files', () async {
+      final player = _RecordingPlayer();
+      final service = ShaderService(player);
+
+      await service.applyPreset(ShaderPreset.nvscalerDefault);
+      final nvscaler = appends(player).single[3];
+      player.commands.clear();
+
+      await service.applyPreset(ShaderPreset.none);
+
+      expect(player.commands, [
+        ['change-list', 'glsl-shaders', 'remove', nvscaler],
+      ]);
+      expect(player.commands.any((command) => command.contains('clr')), isFalse);
+    });
   });
 
   group('reapplyForContent', () {
@@ -61,13 +89,14 @@ void main() {
       await service.applyPreset(ShaderPreset.nvscalerDefault);
       expect(appends(player), hasLength(1));
       expect(service.currentPreset, ShaderPreset.nvscalerDefault);
+      final nvscaler = appends(player).single[3];
 
       player.properties['video-params/colormatrix'] = 'bt.2020-ncl';
       player.commands.clear();
 
       expect(await service.reapplyForContent(), isTrue);
       expect(player.commands, [
-        ['change-list', 'glsl-shaders', 'clr', ''],
+        ['change-list', 'glsl-shaders', 'remove', nvscaler],
       ]);
       expect(service.currentPreset, ShaderPreset.none);
     });

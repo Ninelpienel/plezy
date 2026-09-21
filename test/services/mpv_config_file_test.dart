@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plezy/mpv/mpv_owned_options.dart';
+import 'package:plezy/mpv/player/player.dart';
 import 'package:plezy/services/mpv_config_file.dart';
 
 /// mpv's config parser owns profiles, their conditions and the option aliases
@@ -72,6 +73,48 @@ deband=yes
     });
   });
 
+  group('what is in effect', () {
+    const config = '''
+profile=high-quality
+deband=no
+glsl-shader="C:\\mpv\\shaders\\nnedi3-nns32-win8x4.hook"
+scale=ewa_lanczossharp
+
+[Deband]
+profile-cond=p["video-params/pixelformat"] == "yuv420p"
+deband=yes
+profile-restore=copy
+
+[HDR_ON]
+profile-cond=p["video-params/gamma"] == "pq"
+target-peak=1000
+''';
+
+    test('lists each property the config sets once, aliases resolved, bookkeeping left out', () {
+      expect(MpvConfigFile.propertiesSetBy(config), ['deband', 'glsl-shaders', 'scale', 'target-peak']);
+    });
+
+    test('reads every one of them back from the player', () async {
+      final player = _PropertyPlayer({
+        'deband': 'yes',
+        'glsl-shaders': r'C:\mpv\shaders\nnedi3-nns32-win8x4.hook',
+        'scale': 'ewa_lanczossharp',
+      });
+
+      await MpvConfigFile.logEffectiveValues(player, config);
+
+      expect(player.read, ['deband', 'glsl-shaders', 'scale', 'target-peak']);
+    });
+
+    test('an empty config reads nothing', () async {
+      final player = _PropertyPlayer(const {});
+
+      await MpvConfigFile.logEffectiveValues(player, '# nothing\n');
+
+      expect(player.read, isEmpty);
+    });
+  });
+
   test('the two intercepted names are withheld on every platform', () {
     // Neither is an mpv option; the Linux plane moves its own HDR state when
     // it sees them, so a config file writing them desynchronises the UI.
@@ -79,4 +122,20 @@ deband=yes
     expect(appOwnedMpvProperties, containsAll(appInterceptedMpvProperties));
     expect(appOwnedMpvProperties, containsAll(appEmbeddedOwnedMpvProperties));
   });
+}
+
+class _PropertyPlayer implements Player {
+  _PropertyPlayer(this._values);
+
+  final Map<String, String> _values;
+  final read = <String>[];
+
+  @override
+  Future<String?> getProperty(String name) async {
+    read.add(name);
+    return _values[name];
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

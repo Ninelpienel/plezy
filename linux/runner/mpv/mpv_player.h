@@ -94,6 +94,12 @@ class MpvPlayer {
   /// Empty keeps libmpv's default of no config at all.
   void SetConfigDir(std::string config_dir) { config_dir_ = std::move(config_dir); }
 
+  /// Log level requested before mpv_initialize. mpv reports reading the config
+  /// directory - options, profiles - at "v" while initializing, so a level
+  /// raised afterwards through SetLogLevel misses all of it. Must be set
+  /// before Initialize; empty keeps the default of "info".
+  void SetInitialLogLevel(std::string level) { initial_log_level_ = std::move(level); }
+
   /// Creates the mpv render context bound to the app-owned EGL window surface
   /// backing the Wayland video plane. This is the only render path: nothing
   /// here is shared with or derived from Flutter's GL state, so the context is
@@ -435,6 +441,7 @@ class MpvPlayer {
 
   const bool audio_only_;
   std::string config_dir_;
+  std::string initial_log_level_;
   mpv_handle* mpv_ = nullptr;
   mpv_render_context* mpv_gl_ = nullptr;
 
