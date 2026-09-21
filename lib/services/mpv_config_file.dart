@@ -37,13 +37,14 @@ abstract final class MpvConfigFile {
 
   /// Platforms whose native player passes `configDir` on to libmpv.
   ///
-  /// macOS and iOS still apply the config through the property API: their
-  /// Swift cores need the same two options before `mpv_initialize`. Listing a
-  /// platform here before its core reads `configDir` would switch the user's
-  /// config off there entirely, because the property fallback is skipped as
-  /// soon as a directory has been handed over.
-  static bool get isSupported =>
-      debugSupportedOverride ?? (Platform.isWindows || Platform.isLinux || Platform.isAndroid);
+  /// Desktop only. The config file is how Windows and Linux users bring an
+  /// existing mpv or Plex HTPC setup along; TV and mobile keep applying the
+  /// config through the property API, as they always have. macOS would need
+  /// its Swift core to set the same two options before `mpv_initialize`.
+  /// Listing a platform here before its core reads `configDir` would switch
+  /// the user's config off there entirely, because the property fallback is
+  /// skipped as soon as a directory has been handed over.
+  static bool get isSupported => debugSupportedOverride ?? (Platform.isWindows || Platform.isLinux);
 
   /// Forces [isSupported] so a test on any host can drive either path: the
   /// config file, or the property fallback the Apple platforms still take.

@@ -54,13 +54,6 @@ class MpvPlayerCore private constructor(
   /** Subtitle "Render Resolution" as a fraction of the OSD plane's view size; see [OsdPlanePolicy]. */
   private val osdRenderScale: Float,
   private val initialLogLevel: String,
-  /**
-   * Directory holding the user's `mpv.conf` and `input.conf`, or null for a
-   * session without one. Handed to mpv before `mpv_initialize` so its own
-   * parser reads the file - profiles and their conditions included, which the
-   * property API cannot express (#2407).
-   */
-  private val configDir: String?,
   private val propertyWriterOverride: (suspend (String, String) -> Unit)?,
   /**
    * Test seam standing in for the native player's command path: returns what
@@ -77,22 +70,21 @@ class MpvPlayerCore private constructor(
     audioOnly: Boolean = false,
     hardwareDecoding: Boolean = true,
     osdRenderScale: Float = 1f,
-    initialLogLevel: String = "warn",
-    configDir: String? = null
-  ) : this(context, audioOnly, hardwareDecoding, osdRenderScale, initialLogLevel, configDir, null, null, false)
+    initialLogLevel: String = "warn"
+  ) : this(context, audioOnly, hardwareDecoding, osdRenderScale, initialLogLevel, null, null, false)
 
   internal constructor(
     context: Context,
     audioOnly: Boolean,
     propertyWriter: (suspend (String, String) -> Unit)?
-  ) : this(context, audioOnly, true, 1f, "warn", null, propertyWriter, null, true)
+  ) : this(context, audioOnly, true, 1f, "warn", propertyWriter, null, true)
 
   internal constructor(
     context: Context,
     audioOnly: Boolean,
     propertyWriter: (suspend (String, String) -> Unit)?,
     commandRunner: suspend (Array<String>) -> Long?
-  ) : this(context, audioOnly, true, 1f, "warn", null, propertyWriter, commandRunner, true)
+  ) : this(context, audioOnly, true, 1f, "warn", propertyWriter, commandRunner, true)
 
   companion object {
     private const val TAG = "MpvPlayerCore"
@@ -1003,14 +995,6 @@ class MpvPlayerCore private constructor(
                 // the access token in its argv. mpv decides whether to load the
                 // builtin script during mpv_initialize, hence an option here.
                 setOption("ytdl", "no")
-                // Last, so the user's file is the final word on everything the
-                // app did not reserve for itself: libmpv defaults to
-                // config=no, and reads mpv.conf and input.conf from this
-                // directory during mpv_initialize.
-                configDir?.let {
-                  setOption("config-dir", it)
-                  setOption("config", "yes")
-                }
               }
               val adopted = synchronized(nativeOwnershipLock) {
                 if (disposing || nativeFailure.get() != null) {
