@@ -1,0 +1,63 @@
+# Fork-only: a Windows x64 build of the fork's own branches, as an Actions
+# artifact. The upstream Build workflow only runs from main; this one exists so
+# the fork can try its changes on a desktop. Not meant for upstream.
+name: Fork Windows Build
+
+on:
+  push:
+    branches:
+      - fix/**
+      - custom
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fork-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-windows:
+    name: Build Windows (x64)
+    if: github.repository != 'edde746/plezy'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Cache Windows native dependencies
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: build/windows/x64/_deps
+          key: fork-windows-native-x64-${{ hashFiles('windows/CMakeLists.txt', 'mpv-build.lock.json') }}
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          channel: "stable"
+          flutter-version: "3.47.1"
+          cache: true
+
+      - name: Install dependencies
+        shell: pwsh
+        run: flutter pub get --enforce-lockfile --no-example
+
+      - name: Install patched Flutter engine (DComp)
+        shell: pwsh
+        run: |
+          flutter precache --windows
+          .\windows\tool\install-patched-engine.ps1
+
+      # No update check: it would offer the upstream release, which does not
+      # carry the fork's changes.
+      - name: Build Windows x64
+        shell: pwsh
+        run: flutter build windows --release --dart-define=ENABLE_UPDATE_CHECK=false --dart-define=GIT_COMMIT=${{ github.sha }}
+
+      - name: Upload build
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: plezy-windows-x64-${{ github.sha }}
+          path: build/windows/x64/runner/Release/
