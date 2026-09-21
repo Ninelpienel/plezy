@@ -12,6 +12,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <utility>
 #include <thread>
 #include <vector>
 
@@ -42,6 +43,13 @@ class MpvPlayer {
   // same HWND. In audio-only mode |view| is ignored (pass nullptr) and no
   // window is created.
   bool Initialize(HWND view);
+
+  // Directory holding the user's mpv.conf and input.conf. Must be set before
+  // Initialize: mpv reads it during mpv_initialize (config-dir + config=yes),
+  // with its own parser, so [profile] sections, profile-cond and option
+  // aliases such as glsl-shader work as in a standalone mpv (#2407, #2408).
+  // Empty keeps libmpv's default of no config at all.
+  void SetConfigDir(std::string config_dir) { config_dir_ = std::move(config_dir); }
 
   // Disposes mpv and the video window.
   void Dispose();
@@ -114,6 +122,7 @@ class MpvPlayer {
   void DetachMpvInnerSubclass();
 
   const bool audio_only_;
+  std::string config_dir_;
   mpv_handle* mpv_ = nullptr;
   HWND hwnd_ = nullptr;
   HWND forward_target_view_ = nullptr;

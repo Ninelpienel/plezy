@@ -18,6 +18,12 @@ class ShaderAssetLoader {
   static const String _shaderAssetBase = 'assets/shaders';
   static String? _cachedShaderDir;
   static final RegExp _customShaderFileNamePattern = RegExp(r'^[A-Za-z0-9-]+\.glsl$', caseSensitive: false);
+
+  /// Extensions accepted on import. mpv reads a shader by content, not by
+  /// name - `.hook` is what the prescaler and Anime4K families ship as, and
+  /// refusing it only taught users to rename the file themselves (#2408).
+  /// The stored copy keeps the `.glsl` name every build already recognises.
+  static const Set<String> importableShaderExtensions = {'.glsl', '.hook'};
   static final Map<String, String> _verifiedBuiltInShaderPaths = {};
   static final Map<String, Future<String?>> _inFlightBuiltInShaders = {};
   static int _cacheGeneration = 0;
@@ -234,8 +240,8 @@ class ShaderAssetLoader {
   /// Import a custom shader file into the custom shaders directory.
   /// Returns the stored file name (UUID-based to avoid collisions).
   static Future<String> importCustomShader(String sourcePath, {void Function()? checkCurrent}) async {
-    if (path.extension(sourcePath).toLowerCase() != '.glsl') {
-      throw ArgumentError.value(sourcePath, 'sourcePath', 'Custom shaders must use the .glsl extension');
+    if (!importableShaderExtensions.contains(path.extension(sourcePath).toLowerCase())) {
+      throw ArgumentError.value(sourcePath, 'sourcePath', 'Custom shaders must be a .glsl or .hook file');
     }
 
     final customDir = await _getCustomShaderDirectory();

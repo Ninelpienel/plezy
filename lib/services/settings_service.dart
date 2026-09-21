@@ -854,6 +854,13 @@ class SettingsService extends BaseSharedPreferencesService {
   );
   static const mpvConfigText = _MpvConfigTextPref();
 
+  /// The user's `input.conf`, written next to `mpv.conf` for libmpv to read.
+  ///
+  /// The file only reaches mpv's parser; whether a binding in it ever fires
+  /// depends on mpv receiving the key, which the embedded player does not do
+  /// on its own (#2409).
+  static const mpvInputConfText = StringPref('mpv_input_conf_text');
+
   static final keyboardHotkeys = JsonPref<Map<String, HotKey?>>(
     'keyboard_hotkeys',
     defaultValue: <String, HotKey?>{..._defaultKeyboardHotkeys()},
@@ -1431,6 +1438,7 @@ class SettingsService extends BaseSharedPreferencesService {
     localLastPlayedAt,
     customDownloadPath,
     mpvConfigText,
+    mpvInputConfText,
     mpvPresets,
     customShaderPresets,
     selectedExternalPlayer,
@@ -1457,6 +1465,7 @@ class SettingsService extends BaseSharedPreferencesService {
         pref,
     crashReporting,
     mpvConfigText,
+    mpvInputConfText,
     customRelayUrl,
     rememberedBrightnessLevel,
   ]);

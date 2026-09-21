@@ -438,7 +438,7 @@ class AgentSettingsCommands {
         {
           'oneOf': [
             {
-              'import': {'fileName': 'safe .glsl filename', 'name': 'display name', 'base64': 'file bytes'},
+              'import': {'fileName': 'safe .glsl or .hook filename', 'name': 'display name', 'base64': 'file bytes'},
             },
             {'delete': 'custom preset id'},
           ],
@@ -778,8 +778,8 @@ class AgentSettingsCommands {
         final fileName = agentString(input, 'fileName');
         if (fileName.length > 128 ||
             fileName.startsWith('.') ||
-            !RegExp(r'^[^<>:"/\\|?*\x00-\x1f]+\.glsl$', caseSensitive: false).hasMatch(fileName)) {
-          throw const FormatException('Expected a safe .glsl filename');
+            !RegExp(r'^[^<>:"/\\|?*\x00-\x1f]+\.(glsl|hook)$', caseSensitive: false).hasMatch(fileName)) {
+          throw const FormatException('Expected a safe .glsl or .hook filename');
         }
         final encoded = agentString(input, 'base64');
         if (encoded.length > ((maxResourceBytes + 2) ~/ 3) * 4) throw const FormatException('Shader too large');

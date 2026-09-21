@@ -16,6 +16,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <utility>
 #include <thread>
 #include <tuple>
 #include <vector>
@@ -85,6 +86,13 @@ class MpvPlayer {
   /// once the video plane's EGL surface exists.
   /// @return true if initialization succeeded.
   bool Initialize();
+
+  /// Directory holding the user's mpv.conf and input.conf. Must be set before
+  /// Initialize: mpv reads it during mpv_initialize (config-dir + config=yes),
+  /// with its own parser, so [profile] sections, profile-cond and option
+  /// aliases such as glsl-shader work as in a standalone mpv (#2407, #2408).
+  /// Empty keeps libmpv's default of no config at all.
+  void SetConfigDir(std::string config_dir) { config_dir_ = std::move(config_dir); }
 
   /// Creates the mpv render context bound to the app-owned EGL window surface
   /// backing the Wayland video plane. This is the only render path: nothing
@@ -426,6 +434,7 @@ class MpvPlayer {
   ::_FlValue* NodeToFlValue(mpv_node* node, plezy::mpv_common::NodeConversionBudget* budget);
 
   const bool audio_only_;
+  std::string config_dir_;
   mpv_handle* mpv_ = nullptr;
   mpv_render_context* mpv_gl_ = nullptr;
 

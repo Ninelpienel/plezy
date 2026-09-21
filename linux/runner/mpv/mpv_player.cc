@@ -380,6 +380,14 @@ bool MpvPlayer::Initialize() {
   // further via setLogLevel.
   mpv_request_log_messages(mpv_, "info");
 
+  // The user's config last, so it is the final word on everything the app did
+  // not reserve for itself (the Dart side comments those lines out before it
+  // writes the file). libmpv defaults to config=no.
+  if (!config_dir_.empty()) {
+    mpv_set_option_string(mpv_, "config-dir", config_dir_.c_str());
+    mpv_set_option_string(mpv_, "config", "yes");
+  }
+
   // Initialize mpv.
   int err = mpv_initialize(mpv_);
   if (err < 0) {

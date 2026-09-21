@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart';
 
 import '../../services/settings_service.dart';
+import '../../services/mpv_config_file.dart';
+import '../mpv_owned_options.dart';
 import '../../utils/app_logger.dart';
 import '../models.dart';
 import 'audio_rendering_mode.dart';
@@ -111,6 +113,14 @@ class PlayerNative extends PlayerBase {
 
   /// Whether this instance drives the audio-only core.
   final bool audioOnly;
+
+  bool _loadedConfigFile = false;
+
+  /// Whether libmpv was started on the user's config directory, i.e. whether
+  /// mpv's own parser already applied `mpv.conf`. When false the caller has to
+  /// apply the config itself (see MpvConfigFile) - on the platforms that do
+  /// not pass a config directory, and when writing it failed.
+  bool get loadedConfigFile => _loadedConfigFile;
 
   @override
   final MethodChannel methodChannel;
@@ -238,8 +248,19 @@ class PlayerNative extends PlayerBase {
       // this Dart instance so a later `dispose` that lost the ownership race
       // is provably stale; handlers that predate any of these arguments
       // ignore them.
+      // mpv reads this directory itself (config-dir + config=yes, set before
+      // mpv_initialize), so profiles, their conditions and option aliases work
+      // the way they do in an mpv or Plex HTPC install. Null means no config
+      // directory, which is how every build before this started.
+      final configDir = audioOnly
+          ? null
+          : MpvConfigFile.materializeSync(
+              withheldOptions: usesLinuxVideoPlane ? appOwnedMpvProperties : appInterceptedMpvProperties,
+            );
+      _loadedConfigFile = configDir != null;
       final result = await invoke<Object>('initialize', {
         if (!audioOnly) 'hardwareDecoding': _hardwareDecoding,
+        'configDir': ?configDir,
         if (!audioOnly && Platform.isAndroid)
           'subtitleRenderScale': SettingsService.instance
               .read(SettingsService.subtitleRenderResolution)

@@ -28,6 +28,7 @@ import 'profiles/profile_selection_policy.dart';
 import 'models/external_player_models.dart';
 import 'mixins/mounted_set_state_mixin.dart';
 import 'theme/mono_theme.dart';
+import 'services/mpv_config_file.dart';
 import 'profiles/plex_home_service.dart';
 import 'screens/auth_screen.dart';
 import 'screens/profile/pin_entry_dialog.dart';
@@ -154,6 +155,9 @@ void main() {
   // target in Flutter's tool), so register platform stores manually for
   // the plugins we use.
   _registerTvosPlatformPlugins();
+  // Resolved here, off the player's path: its initialization only writes the
+  // two files into this directory, so it never waits on a platform channel.
+  unawaited(MpvConfigFile.prepare());
   _bootstrapApp();
 }
 

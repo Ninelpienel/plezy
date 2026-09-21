@@ -626,6 +626,14 @@ bool MpvPlayer::Initialize(HWND view) {
   // Default to warn-level logging; Dart side can raise to "v" if debug logging is enabled.
   mpv_request_log_messages(mpv_, "warn");
 
+  // The user's config last, so it is the final word on everything the app did
+  // not reserve for itself (the Dart side comments those lines out before it
+  // writes the file). libmpv defaults to config=no.
+  if (!config_dir_.empty()) {
+    mpv_set_option_string(mpv_, "config-dir", config_dir_.c_str());
+    mpv_set_option_string(mpv_, "config", "yes");
+  }
+
   // Initialize mpv.
   int err = mpv_initialize(mpv_);
   if (err < 0) {

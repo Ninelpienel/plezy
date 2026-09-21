@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:plezy/mpv/player/player_native.dart';
 import 'package:plezy/providers/playback_state_provider.dart';
 import 'package:plezy/screens/video_player_screen.dart';
+import 'package:plezy/services/mpv_config_file.dart';
 import 'package:plezy/services/settings_service.dart';
 import 'package:provider/provider.dart';
 
@@ -50,6 +51,13 @@ Future<void> installHdrStartupHarness({bool linuxVideoPath = true, bool enableHd
   // off is what makes the non-Linux abort testable at all.
   PlayerNative.debugUseLinuxVideoPlane = linuxVideoPath;
   addTearDown(() => PlayerNative.debugUseLinuxVideoPlane = null);
+  // The startup path under test applies the custom config through the
+  // property API. Where libmpv reads a config file instead (MpvConfigFile),
+  // the same guarantees come from MpvConfigFile.sanitize and are covered by
+  // test/services/mpv_config_file_test.dart; this harness keeps exercising the
+  // property fallback the Apple platforms still use.
+  MpvConfigFile.debugSupportedOverride = false;
+  addTearDown(() => MpvConfigFile.debugSupportedOverride = null);
 }
 
 /// Answers like the native plane - `initialize` succeeds with a plain `true`,

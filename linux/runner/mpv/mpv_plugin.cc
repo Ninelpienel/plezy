@@ -1125,6 +1125,13 @@ static void mpv_plugin_handle_method_call(FlMethodChannel* channel, FlMethodCall
       if (!self->player || self->player->IsDisposed()) {
         self->player = std::make_unique<mpv::MpvPlayer>();
       }
+      // Absent from callers that predate it; see MpvPlayer::SetConfigDir.
+      if (args != nullptr && fl_value_get_type(args) == FL_VALUE_TYPE_MAP) {
+        FlValue* config_dir = fl_value_lookup_string(args, "configDir");
+        if (config_dir != nullptr && fl_value_get_type(config_dir) == FL_VALUE_TYPE_STRING) {
+          self->player->SetConfigDir(fl_value_get_string(config_dir));
+        }
+      }
 
       std::string error;
       if (!self->player->Initialize()) {

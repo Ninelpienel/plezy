@@ -92,9 +92,9 @@ open class MpvPlayerPlugin(
   // Test seams, mirroring ExoPlayerPlugin.createMpvCore/initializeMpvCore:
   // MpvPlayer's companion loads libmpv, so substituting both is the only way
   // a JVM test can drive this plugin's initialization path.
-  internal var createCore: (Context, Boolean, Float, String) -> MpvPlayerCore =
-    { context, hardwareDecoding, subtitleRenderScale, logLevel ->
-      MpvPlayerCore(context, audioOnly, hardwareDecoding, subtitleRenderScale, logLevel)
+  internal var createCore: (Context, Boolean, Float, String, String?) -> MpvPlayerCore =
+    { context, hardwareDecoding, subtitleRenderScale, logLevel, configDir ->
+      MpvPlayerCore(context, audioOnly, hardwareDecoding, subtitleRenderScale, logLevel, configDir)
     }
   internal var initializeCore: (MpvPlayerCore, (Boolean) -> Unit) -> Unit = { core, onInitialized ->
     core.initialize(onInitialized)
@@ -269,6 +269,9 @@ open class MpvPlayerPlugin(
     // Absent from older callers and the audio-only core; full is the default.
     val subtitleRenderScale = call.argument<Double>("subtitleRenderScale")?.toFloat() ?: 1f
     val logLevel = call.argument<String>("logLevel") ?: "warn"
+    // Where the user's mpv.conf and input.conf were written for this session.
+    // Absent from the audio-only core and from callers that predate it.
+    val configDir = call.argument<String>("configDir")
     // Video cores need the Activity (surface/view hierarchy); the audio-only
     // core is built on the application context so it can outlive it.
     val coreContext: Context? = if (audioOnly) applicationContext else activity
@@ -327,7 +330,7 @@ open class MpvPlayerPlugin(
         }
 
         gen = ++sessionGeneration
-        core = createCore(coreContext, hardwareDecoding, subtitleRenderScale, logLevel).apply {
+        core = createCore(coreContext, hardwareDecoding, subtitleRenderScale, logLevel, configDir).apply {
           delegate = this@MpvPlayerPlugin
         }
         playerCore = core

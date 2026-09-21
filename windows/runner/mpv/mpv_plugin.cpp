@@ -180,6 +180,15 @@ void MpvPlayerPlugin::HandleMethodCall(
 
     const uint64_t generation = player_generation_.fetch_add(1, std::memory_order_acq_rel) + 1;
     player_ = std::make_unique<MpvPlayer>(audio_only_);
+    // Absent from the audio-only core and from callers that predate it.
+    const auto* init_args = method_call.arguments();
+    if (init_args && std::holds_alternative<flutter::EncodableMap>(*init_args)) {
+      const auto& map = std::get<flutter::EncodableMap>(*init_args);
+      const auto it = map.find(flutter::EncodableValue("configDir"));
+      if (it != map.end() && std::holds_alternative<std::string>(it->second)) {
+        player_->SetConfigDir(std::get<std::string>(it->second));
+      }
+    }
     bool success = player_->Initialize(view);
 
     if (success) {
