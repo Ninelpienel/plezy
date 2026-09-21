@@ -34,6 +34,7 @@ class AppearanceSettingsScreen extends StatelessWidget {
           title: t.settings.display,
           children: [
             _themeSelector(),
+            _textScaleSelector(),
             if (PlatformDetector.isAutomotive()) _displayScaleSelector(),
             if (Platform.isAndroid) _visualEffectsSelector(context),
           ],
@@ -227,6 +228,55 @@ class AppearanceSettingsScreen extends StatelessWidget {
                   Text(t.settings.compact, style: theme.textTheme.bodySmall),
                   Text(t.settings.comfortable, style: theme.textTheme.bodySmall),
                 ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Percent rather than a factor: this one reads as "how big is the text",
+  /// and the display scale next to it already owns the ×-notation.
+  Widget _textScaleSelector() {
+    return SettingValueBuilder<double>(
+      pref: SettingsService.uiTextScale,
+      builder: (context, scale, _) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              Row(
+                children: [
+                  const AppIcon(Symbols.text_fields_rounded, fill: 1),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: .start,
+                      children: [
+                        Text(t.settings.textSize, style: settingsOptionTitleStyle(context)),
+                        Text(
+                          t.settings.textSizeDescription,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text('${(scale * 100).round()}%', style: Theme.of(context).textTheme.bodyMedium),
+                ],
+              ),
+              const SizedBox(height: 12),
+              FocusableSlider(
+                value: scale,
+                min: UiTextScale.min,
+                max: UiTextScale.max,
+                // One division per 5%, so every stop is a value worth reading.
+                divisions: ((UiTextScale.max - UiTextScale.min) * 20).round(),
+                onChanged: (value) => SettingsService.instance.write(SettingsService.uiTextScale, value),
               ),
             ],
           ),

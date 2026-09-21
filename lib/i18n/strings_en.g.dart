@@ -463,6 +463,12 @@ class Translations$settings$en {
 	/// en: 'Display Scale'
 	String get displayScale => 'Display Scale';
 
+	/// en: 'Text Size'
+	String get textSize => 'Text Size';
+
+	/// en: 'Scales every text in the interface, including descriptions and the title shown when a logo is missing'
+	String get textSizeDescription => 'Scales every text in the interface, including descriptions and the title shown when a logo is missing';
+
 	/// en: 'Compact'
 	String get compact => 'Compact';
 
@@ -7266,6 +7272,8 @@ extension on Translations {
 			'settings.oledTheme' => 'OLED',
 			'settings.libraryDensity' => 'Library Density',
 			'settings.displayScale' => 'Display Scale',
+			'settings.textSize' => 'Text Size',
+			'settings.textSizeDescription' => 'Scales every text in the interface, including descriptions and the title shown when a logo is missing',
 			'settings.compact' => 'Compact',
 			'settings.comfortable' => 'Comfortable',
 			'settings.gridSpacing' => 'Grid Spacing',
@@ -7649,10 +7657,10 @@ extension on Translations {
 			'fileInfo.spatialAudio' => 'Spatial Audio',
 			'fileInfo.textBased' => 'Text Based',
 			'fileInfo.subtitleFormat' => 'Sidecar Format',
-			'fileInfo.provider' => 'Provider',
-			'fileInfo.matchScore' => 'Match Score',
 			_ => null,
 		} ?? switch (path) {
+			'fileInfo.provider' => 'Provider',
+			'fileInfo.matchScore' => 'Match Score',
 			'fileInfo.externalDelivery' => 'Can Be Served Separately',
 			'fileInfo.sidecarPath' => 'Sidecar Path',
 			'fileInfo.sourceStream' => 'Copied From',
@@ -8163,10 +8171,10 @@ extension on Translations {
 			'libraries.all' => 'All',
 			'libraries.clearAll' => 'Clear All',
 			'libraries.scanLibraryConfirm' => ({required Object title}) => 'Are you sure you want to scan "${title}"?',
-			'libraries.analyzeLibraryConfirm' => ({required Object title}) => 'Are you sure you want to analyze "${title}"?',
-			'libraries.refreshMetadataConfirm' => ({required Object title}) => 'Are you sure you want to refresh metadata for "${title}"?',
 			_ => null,
 		} ?? switch (path) {
+			'libraries.analyzeLibraryConfirm' => ({required Object title}) => 'Are you sure you want to analyze "${title}"?',
+			'libraries.refreshMetadataConfirm' => ({required Object title}) => 'Are you sure you want to refresh metadata for "${title}"?',
 			'libraries.emptyTrashConfirm' => ({required Object title}) => 'Are you sure you want to empty trash for "${title}"?',
 			'libraries.manageLibraries' => 'Manage Libraries',
 			'libraries.sort' => 'Sort',
@@ -8677,10 +8685,10 @@ extension on Translations {
 			'downloads.downloadNow' => 'Download',
 			'downloads.deleteDownload' => 'Delete download',
 			'downloads.retryDownload' => 'Retry download',
-			'downloads.downloadQueued' => 'Download queued',
-			'downloads.downloadResumed' => 'Download resumed',
 			_ => null,
 		} ?? switch (path) {
+			'downloads.downloadQueued' => 'Download queued',
+			'downloads.downloadResumed' => 'Download resumed',
 			'downloads.serverErrorBitrate' => 'Server error: file may exceed the remote bitrate limit',
 			'downloads.storageFull' => 'Downloads stopped to protect available storage. Free some space or choose another download location, then retry.',
 			'downloads.storageUnavailable' => 'Downloads stopped because available storage could not be checked. Check the download location, then retry.',

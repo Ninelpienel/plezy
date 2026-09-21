@@ -141,6 +141,8 @@
     "oledTheme": "OLED",
     "libraryDensity": "Bibliotekstæthed",
     "displayScale": "Skalering",
+    "textSize": "",
+    "textSizeDescription": "",
     "compact": "Kompakt",
     "comfortable": "Komfortabel",
     "gridSpacing": "Gitterafstand",

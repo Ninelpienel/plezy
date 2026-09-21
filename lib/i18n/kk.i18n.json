@@ -141,6 +141,8 @@
     "oledTheme": "OLED",
     "libraryDensity": "Кітапхана тығыздығы",
     "displayScale": "Дисплей масштабы",
+    "textSize": "",
+    "textSizeDescription": "",
     "compact": "Тығыз",
     "comfortable": "Ыңғайлы",
     "gridSpacing": "Тор аралығы",

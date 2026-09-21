@@ -141,6 +141,8 @@
     "oledTheme": "OLED 純黑",
     "libraryDensity": "媒體庫版面配置密度",
     "displayScale": "介面縮放",
+    "textSize": "",
+    "textSizeDescription": "",
     "compact": "緊湊",
     "comfortable": "舒適",
     "gridSpacing": "網格間距",

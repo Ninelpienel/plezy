@@ -141,6 +141,8 @@
     "oledTheme": "OLED",
     "libraryDensity": "Kitaplık Yoğunluğu",
     "displayScale": "Ekran ölçeği",
+    "textSize": "",
+    "textSizeDescription": "",
     "compact": "Sıkışık",
     "comfortable": "Rahat",
     "gridSpacing": "Izgara Aralığı",

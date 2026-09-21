@@ -244,6 +244,41 @@ class _AutomotiveUiScalePref extends Pref<double> {
       svc.writeDouble(key, value.clamp(AutomotiveUiScale.min, AutomotiveUiScale.max).toDouble());
 }
 
+class UiTextScale {
+  static const double min = 0.7;
+  static const double max = 1.2;
+  static const double defaultValue = 1.0;
+}
+
+/// Multiplies every text size in the interface, on top of whatever scaling the
+/// platform already asks for.
+///
+/// Layout slots keep their size - a smaller value buys room inside a box that
+/// clips or ellipsizes (descriptions, the title that stands in for a missing
+/// clear logo), it does not shrink the box.
+class _UiTextScalePref extends Pref<double> {
+  const _UiTextScalePref() : super('ui_text_scale');
+  @override
+  double get resolvedDefault => UiTextScale.defaultValue;
+  @override
+  double fromJson(Object? value) {
+    if (value is! num || !value.isFinite) throw const FormatException('Expected a finite number');
+    return value.toDouble();
+  }
+
+  @override
+  double readFrom(BaseSharedPreferencesService svc) {
+    // Tolerant read for the same reason as the display scale above: this is
+    // read while building the root app, where a mistyped stored value would
+    // otherwise turn every launch into the error widget.
+    return svc.readDouble(key, defaultValue: resolvedDefault).clamp(UiTextScale.min, UiTextScale.max).toDouble();
+  }
+
+  @override
+  Future<void> writeTo(BaseSharedPreferencesService svc, double value) =>
+      svc.writeDouble(key, value.clamp(UiTextScale.min, UiTextScale.max).toDouble());
+}
+
 /// Migrates from the legacy `use_season_poster` boolean key.
 class _EpisodePosterModePref extends EnumPref<EpisodePosterMode> {
   const _EpisodePosterModePref()
@@ -845,6 +880,7 @@ class SettingsService extends BaseSharedPreferencesService {
     defaultValue: GridSpacing.tight,
   );
   static const automotiveUiScale = _AutomotiveUiScalePref();
+  static const uiTextScale = _UiTextScalePref();
   static const tvCornerSpotlightBackdrop = BoolPref('tv_corner_spotlight_backdrop');
   static const episodePosterMode = _EpisodePosterModePref();
   static const continueWatchingAction = EnumPref<ContinueWatchingAction>(
@@ -1389,6 +1425,7 @@ class SettingsService extends BaseSharedPreferencesService {
     libraryDensity,
     gridSpacing,
     automotiveUiScale,
+    uiTextScale,
     tvCornerSpotlightBackdrop,
     episodePosterMode,
     continueWatchingAction,

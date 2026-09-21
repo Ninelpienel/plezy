@@ -141,6 +141,8 @@
     "oledTheme": "OLED",
     "libraryDensity": "ライブラリの密度",
     "displayScale": "表示スケール",
+    "textSize": "",
+    "textSizeDescription": "",
     "compact": "コンパクト",
     "comfortable": "ゆったり",
     "gridSpacing": "グリッド間隔",

@@ -141,6 +141,8 @@
     "oledTheme": "OLED",
     "libraryDensity": "Kutubxona zichligi",
     "displayScale": "Ekran miqyosi",
+    "textSize": "",
+    "textSizeDescription": "",
     "compact": "Ixcham",
     "comfortable": "Qulay",
     "gridSpacing": "Toʻr oraligʻi",

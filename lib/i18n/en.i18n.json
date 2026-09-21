@@ -141,6 +141,8 @@
     "oledTheme": "OLED",
     "libraryDensity": "Library Density",
     "displayScale": "Display Scale",
+    "textSize": "Text Size",
+    "textSizeDescription": "Scales every text in the interface, including descriptions and the title shown when a logo is missing",
     "compact": "Compact",
     "comfortable": "Comfortable",
     "gridSpacing": "Grid Spacing",

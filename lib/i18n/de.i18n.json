@@ -141,6 +141,8 @@
     "oledTheme": "OLED",
     "libraryDensity": "Darstellungsdichte der Mediathek",
     "displayScale": "Skalierung",
+    "textSize": "Textgröße",
+    "textSizeDescription": "Skaliert alle Texte der Oberfläche, auch Beschreibungen und den Titel, der ein fehlendes Logo ersetzt",
     "compact": "Kompakt",
     "comfortable": "Großzügig",
     "gridSpacing": "Rasterabstand",

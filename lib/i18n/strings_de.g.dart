@@ -251,6 +251,8 @@ class _Translations$settings$de extends Translations$settings$en {
 	@override String get oledTheme => 'OLED';
 	@override String get libraryDensity => 'Darstellungsdichte der Mediathek';
 	@override String get displayScale => 'Skalierung';
+	@override String get textSize => 'Textgröße';
+	@override String get textSizeDescription => 'Skaliert alle Texte der Oberfläche, auch Beschreibungen und den Titel, der ein fehlendes Logo ersetzt';
 	@override String get compact => 'Kompakt';
 	@override String get comfortable => 'Großzügig';
 	@override String get gridSpacing => 'Rasterabstand';
@@ -3137,6 +3139,8 @@ extension on TranslationsDe {
 			'settings.oledTheme' => 'OLED',
 			'settings.libraryDensity' => 'Darstellungsdichte der Mediathek',
 			'settings.displayScale' => 'Skalierung',
+			'settings.textSize' => 'Textgröße',
+			'settings.textSizeDescription' => 'Skaliert alle Texte der Oberfläche, auch Beschreibungen und den Titel, der ein fehlendes Logo ersetzt',
 			'settings.compact' => 'Kompakt',
 			'settings.comfortable' => 'Großzügig',
 			'settings.gridSpacing' => 'Rasterabstand',
@@ -3520,10 +3524,10 @@ extension on TranslationsDe {
 			'fileInfo.spatialAudio' => 'Räumliches Audio',
 			'fileInfo.textBased' => 'Textbasiert',
 			'fileInfo.subtitleFormat' => 'Sidecar-Format',
-			'fileInfo.provider' => 'Anbieter',
-			'fileInfo.matchScore' => 'Übereinstimmungswert',
 			_ => null,
 		} ?? switch (path) {
+			'fileInfo.provider' => 'Anbieter',
+			'fileInfo.matchScore' => 'Übereinstimmungswert',
 			'fileInfo.externalDelivery' => 'Kann separat bereitgestellt werden',
 			'fileInfo.sidecarPath' => 'Sidecar-Pfad',
 			'fileInfo.sourceStream' => 'Kopiert von',
@@ -4034,10 +4038,10 @@ extension on TranslationsDe {
 			'libraries.clearAll' => 'Alle Filter entfernen',
 			'libraries.scanLibraryConfirm' => ({required Object title}) => '„${title}“ wirklich scannen?',
 			'libraries.analyzeLibraryConfirm' => ({required Object title}) => '„${title}“ wirklich analysieren?',
-			'libraries.refreshMetadataConfirm' => ({required Object title}) => 'Metadaten für „${title}“ wirklich aktualisieren?',
-			'libraries.emptyTrashConfirm' => ({required Object title}) => 'Papierkorb für „${title}“ wirklich leeren?',
 			_ => null,
 		} ?? switch (path) {
+			'libraries.refreshMetadataConfirm' => ({required Object title}) => 'Metadaten für „${title}“ wirklich aktualisieren?',
+			'libraries.emptyTrashConfirm' => ({required Object title}) => 'Papierkorb für „${title}“ wirklich leeren?',
 			'libraries.manageLibraries' => 'Mediatheken verwalten',
 			'libraries.sort' => 'Sortieren',
 			'libraries.sortBy' => 'Sortieren nach',
@@ -4548,10 +4552,10 @@ extension on TranslationsDe {
 			'downloads.downloadResumed' => 'Download fortgesetzt',
 			'downloads.serverErrorBitrate' => 'Serverfehler: Datei überschreitet möglicherweise das Remote-Bitrate-Limit',
 			'downloads.storageFull' => 'Die Downloads wurden angehalten, weil der Gerätespeicher voll ist. Gib Speicherplatz frei und versuche es erneut.',
-			'downloads.storageUnavailable' => 'Downloads wurden angehalten, weil der verfügbare Speicherplatz nicht geprüft werden konnte. Prüfe den Download-Speicherort und versuche es erneut.',
-			'downloads.episodesQueued' => ({required Object count}) => '${count} Episoden zum Download hinzugefügt',
 			_ => null,
 		} ?? switch (path) {
+			'downloads.storageUnavailable' => 'Downloads wurden angehalten, weil der verfügbare Speicherplatz nicht geprüft werden konnte. Prüfe den Download-Speicherort und versuche es erneut.',
+			'downloads.episodesQueued' => ({required Object count}) => '${count} Episoden zum Download hinzugefügt',
 			'downloads.downloadDeleted' => 'Download gelöscht',
 			'downloads.deleteConfirm' => ({required Object title}) => '"${title}" von diesem Gerät löschen?',
 			'downloads.cancelledDownloadTitle' => 'Abgebrochener Download',
