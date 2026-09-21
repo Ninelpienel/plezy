@@ -57,6 +57,21 @@ deband=yes
     });
   });
 
+  group('setsOption', () {
+    // Decides whether Plezy's bundled subtitle font may overwrite sub-font.
+    test('finds an option in any spelling and inside a profile', () {
+      expect(MpvConfigFile.setsOption('sub-font = Amazon Ember\n', 'sub-font'), isTrue);
+      expect(MpvConfigFile.setsOption('--sub-font="Amazon Ember"', 'sub-font'), isTrue);
+      expect(MpvConfigFile.setsOption('[Anime]\nprofile-cond=true\nsub-font=Amazon Ember', 'sub-font'), isTrue);
+    });
+
+    test('a commented line or a longer option name does not count', () {
+      expect(MpvConfigFile.setsOption('# sub-font=Amazon Ember', 'sub-font'), isFalse);
+      expect(MpvConfigFile.setsOption('sub-font-size=40', 'sub-font'), isFalse);
+      expect(MpvConfigFile.setsOption('', 'sub-font'), isFalse);
+    });
+  });
+
   test('the two intercepted names are withheld on every platform', () {
     // Neither is an mpv option; the Linux plane moves its own HDR state when
     // it sees them, so a config file writing them desynchronises the UI.

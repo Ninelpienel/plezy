@@ -46,6 +46,7 @@ import '../providers/offline_mode_provider.dart';
 import '../providers/playback_state_provider.dart';
 import '../providers/companion_remote_provider.dart';
 import '../services/fullscreen_state_manager.dart';
+import '../services/mpv_config_file.dart';
 import '../services/car_ux_restrictions_service.dart';
 import '../services/driver_distraction.dart';
 import '../services/discord_rpc_service.dart';
@@ -1664,7 +1665,13 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
 
       if (!_isPlayerInitializationCurrent(generation)) return;
       initPhase = 'configuring player';
-      await currentPlayer.configureSubtitleFonts();
+      // A font chosen in mpv.conf wins over the bundled default. With the
+      // config directory mpv has already applied it by now, and the property
+      // replay below never runs to set it back, so overwriting it here would
+      // lose it for good.
+      await currentPlayer.configureSubtitleFonts(
+        setDefaultFont: !MpvConfigFile.setsOption(settingsService.read(SettingsService.mpvConfigText), 'sub-font'),
+      );
       await currentPlayer.setProperty('sub-ass', 'yes'); // Enable libass
       if (Platform.isAndroid && useExoPlayer) {
         final tunneledPlayback = settingsService.read(SettingsService.tunneledPlayback);

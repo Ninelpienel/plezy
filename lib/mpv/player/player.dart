@@ -198,7 +198,11 @@ abstract class Player {
   ///
   /// Extracts a comprehensive Unicode font (Go Noto) to the cache directory
   /// and sets `sub-fonts-dir` and `sub-font` properties.
-  Future<void> configureSubtitleFonts();
+  ///
+  /// [setDefaultFont] false leaves `sub-font` alone: the user's mpv.conf picks
+  /// the font, and mpv may already have applied it from the config directory
+  /// before this runs.
+  Future<void> configureSubtitleFonts({bool setDefaultFont = true});
 
   /// Enable or disable audio passthrough mode.
   ///

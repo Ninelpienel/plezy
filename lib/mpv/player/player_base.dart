@@ -1374,12 +1374,12 @@ abstract class PlayerBase with PlayerStreamControllersMixin implements Player {
   Future<void> setLogLevel(String level) async {}
 
   @override
-  Future<void> configureSubtitleFonts() async {
+  Future<void> configureSubtitleFonts({bool setDefaultFont = true}) async {
     try {
       final fontDir = await SubtitleFontLoader.loadSubtitleFont();
       if (fontDir != null) {
         await setProperty('sub-fonts-dir', fontDir);
-        await setProperty('sub-font', SubtitleFontLoader.fontName);
+        if (setDefaultFont) await setProperty('sub-font', SubtitleFontLoader.fontName);
       }
     } catch (e) {
       // Font configuration is not critical - continue without it

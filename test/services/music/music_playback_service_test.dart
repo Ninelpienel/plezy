@@ -365,7 +365,7 @@ class FakePlayer implements Player {
   Future<void> awaitDisplayModeSwitch({int extraDelayMs = 0}) async {}
 
   @override
-  Future<void> configureSubtitleFonts() async {}
+  Future<void> configureSubtitleFonts({bool setDefaultFont = true}) async {}
 
   @override
   Future<void> setAudioPassthrough(bool enabled) async {}
