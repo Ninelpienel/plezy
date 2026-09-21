@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:plezy/services/htpc_mode.dart';
 import 'package:plezy/services/settings_service.dart';
 import 'package:plezy/utils/platform_detector.dart';
+import 'package:plezy/widgets/tv_browse_rail.dart';
 
 import '../test_helpers/prefs.dart';
 
@@ -71,6 +72,15 @@ void main() {
       await settings.write(SettingsService.forceTvMode, true);
 
       expect(HtpcMode.forcesTvLayout(settings), isTrue);
+    });
+
+    test('rails run to the bottom edge in the HTPC view only', () async {
+      PlatformDetector.debugSetIsDesktopOSOverride(true);
+      expect(TvBrowseRailLayout.railBottomPaddingForScale(1), 8, reason: 'TV keeps its gap');
+
+      await settings.write(SettingsService.htpcMode, true);
+
+      expect(TvBrowseRailLayout.railBottomPaddingForScale(1), 0);
     });
   });
 }

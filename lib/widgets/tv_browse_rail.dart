@@ -19,6 +19,7 @@ import '../media/media_item.dart';
 import '../navigation/main_screen_scope.dart';
 import '../screens/hub_detail_screen.dart';
 import '../services/device_performance.dart';
+import '../services/htpc_mode.dart';
 import '../services/settings_service.dart';
 import '../theme/mono_tokens.dart';
 import '../utils/layout_constants.dart';
@@ -83,7 +84,9 @@ class TvBrowseRailLayout {
 
   static double railTopPaddingForScale(double scale) => 12 * scale;
 
-  static double railBottomPaddingForScale(double scale) => 8 * scale;
+  /// HTPC drops the gap: on a PC monitor the rail runs to the screen's edge
+  /// instead of stopping above a black strip kept for TV overscan.
+  static double railBottomPaddingForScale(double scale) => HtpcMode.isActive ? 0 : 8 * scale;
 
   static double railInteractionExpansionForScale(double scale) => (12 * scale).clamp(8, 18).toDouble();
 
