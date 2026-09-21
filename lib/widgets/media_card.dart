@@ -661,15 +661,17 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
                 Expanded(child: poster),
               // Grid cells (no fixed height; the Expanded poster absorbs the
               // delta) grow the poster→title gap with the grid-spacing
-              // setting (#2083). Fixed-height hub-row cards keep 2px — their
-              // fixed text band cannot absorb more.
+              // setting (#2083). Fixed-height hub-row cards take a constant:
+              // 2px left the title sitting on the artwork's edge, so the band
+              // they sit in (TvBrowseRailLayout.metricsForHub) carries the
+              // room for this gap and the line heights below.
               SizedBox(
-                height: posterHeight != null ? 2 : context.settingsRead(SettingsService.gridSpacing).posterTitleGap,
+                height: posterHeight != null ? 6 : context.settingsRead(SettingsService.gridSpacing).posterTitleGap,
               ),
               if (widget.onTap == null && item is MediaItem && !_impliesShowTitle(item) && _hasClickableTitle(item))
                 _ClickableText(
                   text: item.displayTitle,
-                  style: const TextStyle(fontWeight: .w600, fontSize: 13, height: 1.1),
+                  style: const TextStyle(fontWeight: .w600, fontSize: 12, height: 1.25),
                   onTap: () => _navigateToFocusedDetail(context, item, isOffline: widget.isOffline),
                 )
               else
@@ -682,9 +684,12 @@ class MediaCardState extends State<MediaCard> with ContextMenuTapMixin<MediaCard
                     },
                     maxLines: 1,
                     overflow: .ellipsis,
-                    style: const TextStyle(fontWeight: .w600, fontSize: 13, height: 1.1),
+                    style: const TextStyle(fontWeight: .w600, fontSize: 12, height: 1.25),
                   ),
                 ),
+              // The caption is a second line, not a continuation of the
+              // title; without this it reads as one crowded block.
+              const SizedBox(height: 2),
               if (item is MediaPlaylist)
                 _MediaCardHelpers.buildPlaylistMeta(context, item)
               else if (item is MediaItem)
@@ -1161,7 +1166,7 @@ Widget _buildPosterImage(
 
 class _MediaCardHelpers {
   static TextStyle? _captionStyle(BuildContext context) =>
-      Theme.of(context).textTheme.bodySmall?.copyWith(color: tokens(context).textMuted, fontSize: 11, height: 1.1);
+      Theme.of(context).textTheme.bodySmall?.copyWith(color: tokens(context).textMuted, fontSize: 11, height: 1.2);
 
   static Widget _caption(BuildContext context, String text) => ExcludeSemantics(
     child: Text(text, maxLines: 1, overflow: .ellipsis, style: _captionStyle(context)),

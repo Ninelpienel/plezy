@@ -14,7 +14,6 @@ import '../utils/media_image_helper.dart';
 import '../services/settings_service.dart';
 import '../utils/tone_mapped_logo_image.dart';
 import 'cycling_media_backdrop.dart';
-import 'fitting_title_text.dart';
 import 'fitted_metadata_line.dart';
 import 'settings_builder.dart';
 import 'media_rating_badge.dart';
@@ -66,6 +65,12 @@ class TvSpotlightBackground extends StatelessWidget {
     final fallbackPaths = media == null
         ? const <String>[]
         : <String>[...media.heroArtCandidates(containerAspectRatio: containerAspect), ?media.thumbPath];
+    // The summary keeps the column width the info block had before the title
+    // was widened; body copy across two thirds of a TV is ~95 characters a
+    // line, which is past the point where the eye finds the next line.
+    final summaryMaxWidth = (size.width * 0.57 - (contentLeft ?? TvLayoutConstants.horizontalInset))
+        .clamp(160.0, double.infinity)
+        .toDouble();
     return SettingValueBuilder<bool>(
       pref: SettingsService.tvCornerSpotlightBackdrop,
       builder: (context, cornerBackdrop, _) {
@@ -102,7 +107,10 @@ class TvSpotlightBackground extends StatelessWidget {
             if (media != null && showInfo)
               Positioned(
                 left: contentLeft ?? TvLayoutConstants.horizontalInset,
-                right: MediaQuery.sizeOf(context).width * 0.43,
+                // The title runs to two thirds of the screen before it
+                // ellipsizes; the summary keeps the old, narrower column
+                // (_summaryMaxWidth) so its line length stays readable.
+                right: size.width * (1 / 3),
                 top: contentTop,
                 bottom: contentBottom,
                 // The info block still cross-fades via AnimatedSwitcher, but its
@@ -120,7 +128,10 @@ class TvSpotlightBackground extends StatelessWidget {
                     child: LayoutBuilder(
                       builder: (context, constraints) {
                         if (!constraints.hasBoundedHeight || constraints.maxHeight <= 0 || constraints.maxWidth <= 0) {
-                          return Align(alignment: .bottomLeft, child: _buildInfo(context, media));
+                          return Align(
+                            alignment: .bottomLeft,
+                            child: _buildInfo(context, media, summaryMaxWidth: summaryMaxWidth),
+                          );
                         }
 
                         return Align(
@@ -128,7 +139,10 @@ class TvSpotlightBackground extends StatelessWidget {
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
                             alignment: .bottomLeft,
-                            child: SizedBox(width: constraints.maxWidth, child: _buildInfo(context, media)),
+                            child: SizedBox(
+                              width: constraints.maxWidth,
+                              child: _buildInfo(context, media, summaryMaxWidth: summaryMaxWidth),
+                            ),
                           ),
                         );
                       },
@@ -181,7 +195,7 @@ class TvSpotlightBackground extends StatelessWidget {
     );
   }
 
-  Widget _buildInfo(BuildContext context, MediaItem media) {
+  Widget _buildInfo(BuildContext context, MediaItem media, {required double summaryMaxWidth}) {
     final scale = _scale(context);
     final colorScheme = Theme.of(context).colorScheme;
     final shouldHideSpoiler = hideSpoilers && media.shouldHideSpoiler;
@@ -195,31 +209,43 @@ class TvSpotlightBackground extends StatelessWidget {
         _buildLogoOrTitle(context, media, title),
         SizedBox(height: _sectionGap(scale)),
         _buildMetadataLine(context, media),
-        if (summary != null && summary.isNotEmpty) ...[
-          SizedBox(height: _sectionGap(scale)),
-          Text(
-            summary,
-            maxLines: compact ? 3 : 4,
-            overflow: .ellipsis,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: colorScheme.onSurface.withValues(alpha: 0.78),
-              fontSize: _summaryFontSize(scale),
-              height: compact ? 1.34 : 1.45,
+        SizedBox(height: _sectionGap(scale)),
+        // The text band is always its full height, whatever it holds. The
+        // column is anchored to the bottom of the spotlight, so a one-line
+        // summary would otherwise pull the title and the metadata down with
+        // it and make every item sit at a different height.
+        SizedBox(
+          height: _summaryBandHeight(scale),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: summaryMaxWidth),
+            child: Align(
+              alignment: .centerLeft,
+              child: summary != null && summary.isNotEmpty
+                  ? Text(
+                      summary,
+                      maxLines: _summaryMaxLines,
+                      overflow: .ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onSurface.withValues(alpha: 0.78),
+                        fontSize: _summaryFontSize(scale),
+                        height: _summaryLineSpacing,
+                      ),
+                    )
+                  : shouldHideSpoiler && media.isEpisode
+                  ? Text(
+                      media.title ?? '',
+                      maxLines: 2,
+                      overflow: .ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onSurface.withValues(alpha: 0.72),
+                        fontSize: _summaryFontSize(scale),
+                        height: _summaryLineSpacing,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ),
-        ] else if (shouldHideSpoiler && media.isEpisode) ...[
-          SizedBox(height: _sectionGap(scale)),
-          Text(
-            media.title ?? '',
-            maxLines: 2,
-            overflow: .ellipsis,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: colorScheme.onSurface.withValues(alpha: 0.72),
-              fontSize: _summaryFontSize(scale),
-              height: compact ? 1.34 : 1.45,
-            ),
-          ),
-        ],
+        ),
       ],
     );
   }
@@ -237,7 +263,14 @@ class TvSpotlightBackground extends StatelessWidget {
     final logoWidth = _logoWidth(scale);
     final logoHeight = _logoHeight(scale);
     if (logoPath == null || logoPath.isEmpty) {
-      return SizedBox(width: logoWidth, height: logoHeight, child: _buildTitle(context, title));
+      // The stand-in for a missing logo is text, not a logo-shaped box: it
+      // gets the block's full width (two thirds of the screen) and ellipsizes
+      // there, instead of wrapping inside the narrower artwork slot.
+      return SizedBox(
+        height: logoHeight,
+        width: double.infinity,
+        child: Align(alignment: .centerLeft, child: _buildTitle(context, title)),
+      );
     }
     final pixelRatio = MediaImageHelper.artworkPixelRatio(context, imageType: ImageType.heroLogo);
     final (logoMemWidth, logoMemHeight) = MediaImageHelper.getMemCacheDimensions(
@@ -286,8 +319,14 @@ class TvSpotlightBackground extends StatelessWidget {
   Widget _buildTitle(BuildContext context, String title) {
     final scale = _scale(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return FittingTitleText(
+    // Not FittingTitleText: that one shrinks the type until the title fits,
+    // which on a long name produced a second line at a size that no longer
+    // matched any other spotlight. One line, cut where the block ends.
+    return Text(
       title,
+      maxLines: 1,
+      overflow: .ellipsis,
+      softWrap: false,
       style: Theme.of(context).textTheme.displaySmall?.copyWith(
         color: colorScheme.onSurface,
         fontSize: _titleFontSize(scale),
@@ -356,7 +395,17 @@ class TvSpotlightBackground extends StatelessWidget {
     );
   }
 
-  double _sectionGap(double scale) => (compact ? 10 : 16) * scale;
+  int get _summaryMaxLines => compact ? 3 : 4;
+
+  double get _summaryLineSpacing => compact ? 1.34 : 1.45;
+
+  /// Height of the reserved text band: exactly [_summaryMaxLines] lines.
+  ///
+  /// A line box is `fontSize * height` when the style sets `height`, so this
+  /// is the same number the [Text] above would have produced at full length.
+  double _summaryBandHeight(double scale) => _summaryFontSize(scale) * _summaryLineSpacing * _summaryMaxLines;
+
+  double _sectionGap(double scale) => (compact ? 12 : 16) * scale;
 
   double _logoWidth(double scale) =>
       (compact ? TvLayoutConstants.compactHeroLogoWidth : TvLayoutConstants.heroLogoWidth) * scale;
@@ -364,9 +413,9 @@ class TvSpotlightBackground extends StatelessWidget {
   double _logoHeight(double scale) =>
       (compact ? TvLayoutConstants.compactHeroLogoHeight : TvLayoutConstants.heroLogoHeight) * scale;
 
-  double _titleFontSize(double scale) => (compact ? 44 : 54) * scale;
+  double _titleFontSize(double scale) => (compact ? 30 : 54) * scale;
 
-  double _metadataFontSize(double scale) => (compact ? 16 : 18) * scale;
+  double _metadataFontSize(double scale) => (compact ? 13 : 18) * scale;
 
-  double _summaryFontSize(double scale) => (compact ? 18 : 20) * scale;
+  double _summaryFontSize(double scale) => (compact ? 13 : 20) * scale;
 }

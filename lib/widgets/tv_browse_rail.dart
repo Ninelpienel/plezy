@@ -167,7 +167,7 @@ class TvBrowseRailLayout {
     final posterHeight = (isPersonHub || isSquareHub)
         ? posterWidth
         : (useWideLayout ? posterWidth * 9 / 16 : posterWidth * 1.5);
-    final labelHeight = fullCardLayout ? 0.0 : ((isPersonHub ? 52 : 36) * scale);
+    final labelHeight = fullCardLayout ? 0.0 : ((isPersonHub ? 52 : 46) * scale);
     final containerHeight = (posterHeight + labelHeight).ceilToDouble();
     final height = containerHeight + focusExtra + (10 * scale);
 
@@ -1455,7 +1455,7 @@ class TvBrowseRailState extends State<TvBrowseRail> with TickerProviderStateMixi
                         overflow: .ellipsis,
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: titleColor,
-                          fontSize: 18 * scale,
+                          fontSize: 15 * scale,
                           height: 1,
                           fontWeight: isActive ? FontWeight.w800 : FontWeight.w700,
                         ),

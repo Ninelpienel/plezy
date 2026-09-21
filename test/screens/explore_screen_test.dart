@@ -17,7 +17,6 @@ import 'package:plezy/theme/mono_theme.dart';
 import 'package:plezy/utils/platform_detector.dart';
 import 'package:plezy/widgets/catalog_source_logo.dart';
 import 'package:plezy/widgets/search_input_field.dart';
-import 'package:plezy/widgets/fitting_title_text.dart';
 import 'package:plezy/widgets/optimized_media_image.dart' show ClearLogoImage;
 import 'package:plezy/widgets/tv_spotlight_background.dart';
 import 'package:provider/provider.dart';
@@ -405,7 +404,6 @@ void main() {
       final spotlightFinder = find.byType(TvSpotlightBackground);
       final spotlight = tester.widget<TvSpotlightBackground>(spotlightFinder);
       expect(spotlight.item?.clearLogoPath, isNull);
-      expect(find.descendant(of: spotlightFinder, matching: find.byType(FittingTitleText)), findsOneWidget);
       expect(find.descendant(of: spotlightFinder, matching: find.text('Plain Title')), findsOneWidget);
     });
 
