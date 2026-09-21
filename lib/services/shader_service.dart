@@ -25,6 +25,12 @@ class ShaderService {
   /// Reference to ambient lighting service for re-appending its shader after chain rebuilds.
   AmbientLightingService? ambientLightingService;
 
+  /// The shader files this service appended, i.e. the active preset's. Only
+  /// these are removed on a rebuild: the rest of the chain belongs to the
+  /// user's mpv.conf (`glsl-shader=...`), which a `clr` used to wipe at every
+  /// playback start.
+  List<String> _appendedPaths = const [];
+
   ShaderService(this._player);
 
   /// The preset applied to the chain — none while NVScaler is auto-skipped.
@@ -88,14 +94,21 @@ class ShaderService {
   static bool _skipsOnHdr(ShaderPreset preset) =>
       preset.type == ShaderPresetType.nvscaler && preset.nvscalerConfig?.autoHdrSkip == true;
 
-  /// Rebuild mpv's chain for [preset]: clear, append its shaders, keep
-  /// ambient lighting last.
+  /// Rebuild the app's part of mpv's chain for [preset]: remove the previous
+  /// preset's shaders, append this one's after the user's own, keep ambient
+  /// lighting last.
   Future<void> _applyChain(ShaderPreset preset) async {
     final shaderPaths = await ShaderAssetLoader.getShadersForPreset(preset);
 
-    await _clearShaders();
-    for (final shaderPath in shaderPaths) {
-      await _player.command(['change-list', 'glsl-shaders', 'append', shaderPath]);
+    await _removeOwnShaders();
+    final appended = <String>[];
+    try {
+      for (final shaderPath in shaderPaths) {
+        await _player.command(['change-list', 'glsl-shaders', 'append', shaderPath]);
+        appended.add(shaderPath);
+      }
+    } finally {
+      _appendedPaths = appended;
     }
     _currentPreset = preset;
 
@@ -107,11 +120,15 @@ class ShaderService {
     }
   }
 
-  Future<void> _clearShaders() async {
+  Future<void> _removeOwnShaders() async {
     try {
-      await _player.command(['change-list', 'glsl-shaders', 'clr', '']);
+      await ambientLightingService?.detachShader();
+      for (final path in _appendedPaths) {
+        await _player.command(['change-list', 'glsl-shaders', 'remove', path]);
+      }
+      _appendedPaths = const [];
     } catch (e, st) {
-      appLogger.w('ShaderService: Failed to clear shaders', error: e, stackTrace: st);
+      appLogger.w('ShaderService: Failed to remove the previous preset', error: e, stackTrace: st);
     }
   }
 

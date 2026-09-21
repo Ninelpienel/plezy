@@ -296,7 +296,9 @@ class _MpvConfigScreenState extends State<MpvConfigScreen> with ListenableBindin
 
   Widget _buildConfigEditor() {
     // TV keyboards cannot host a multiline field (#2232): one row per line.
-    if (PlatformDetector.isTV()) {
+    // A desktop in the TV layout (the HTPC view, Force TV mode) still has a
+    // real keyboard, and a config with profiles needs the free text field.
+    if (PlatformDetector.isTV() && !PlatformDetector.isDesktopOS()) {
       return MpvConfigLineEditor(text: _textController.text, onChanged: _handleLineEditorChanged, style: _editorStyle);
     }
     return Focus(

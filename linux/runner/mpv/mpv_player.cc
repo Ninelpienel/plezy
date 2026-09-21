@@ -376,9 +376,10 @@ bool MpvPlayer::Initialize() {
   // evidence a silently software-decoding session leaves behind; at "warn"
   // neither ever reaches the app log (mpv_request_log_messages takes a single
   // global level - there is no per-module syntax here), so a hwdec regression
-  // is indistinguishable from a working one. Debug logging raises this
-  // further via setLogLevel.
-  mpv_request_log_messages(mpv_, "info");
+  // is indistinguishable from a working one. Debug logging raises this to
+  // "v" already here (SetInitialLogLevel), so the config directory read below
+  // is logged too.
+  mpv_request_log_messages(mpv_, initial_log_level_.empty() ? "info" : initial_log_level_.c_str());
 
   // The user's config last, so it is the final word on everything the app did
   // not reserve for itself (the Dart side comments those lines out before it

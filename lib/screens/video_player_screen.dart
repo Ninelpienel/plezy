@@ -1666,14 +1666,24 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
 
       if (!_isPlayerInitializationCurrent(generation)) return;
       initPhase = 'configuring player';
-      // A font chosen in mpv.conf wins over the bundled default. With the
-      // config directory mpv has already applied it by now, and the property
-      // replay below never runs to set it back, so overwriting it here would
-      // lose it for good.
-      await currentPlayer.configureSubtitleFonts(
-        setDefaultFont: !MpvConfigFile.setsOption(settingsService.read(SettingsService.mpvConfigText), 'sub-font'),
-      );
-      await currentPlayer.setProperty('sub-ass', 'yes'); // Enable libass
+      // mpv.conf has the last word on every option it sets. With the config
+      // directory mpv has applied it before any of the writes below, and the
+      // property replay at the end never runs to set it back, so an app
+      // default written over one of its options would win for good. Each
+      // startup default therefore goes through [setAppDefault], which leaves
+      // an option mpv.conf sets - top level or inside a profile - alone.
+      final userMpvConfig = settingsService.read(SettingsService.mpvConfigText);
+      bool userConfigSets(String option) => MpvConfigFile.setsOption(userMpvConfig, option);
+      Future<void> setAppDefault(String name, String value) async {
+        if (userConfigSets(name)) {
+          appLogger.d('VideoPlayerScreen: $name left to mpv.conf');
+          return;
+        }
+        await currentPlayer.setProperty(name, value);
+      }
+
+      await currentPlayer.configureSubtitleFonts(setDefaultFont: !userConfigSets('sub-font'));
+      await setAppDefault('sub-ass', 'yes'); // Enable libass
       if (Platform.isAndroid && useExoPlayer) {
         final tunneledPlayback = settingsService.read(SettingsService.tunneledPlayback);
         await currentPlayer.setProperty('tunneled-playback', tunneledPlayback ? 'yes' : 'no');
@@ -1695,11 +1705,13 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
         _audioFocusFuture = currentPlayer.requestAudioFocus();
         _audioFocusFuture!.ignore();
       }
-      await currentPlayer.setProperty('msg-level', debugLoggingEnabled ? 'all=debug,ffmpeg/video=warn' : 'all=error');
+      // Warnings too without debug logging: a shader that fails to load or an
+      // option mpv rejects is a warning, and all=error hid exactly those.
+      await setAppDefault('msg-level', debugLoggingEnabled ? 'all=debug,ffmpeg/video=warn' : 'all=warn');
       if (!Platform.isAndroid) {
         await currentPlayer.setLogLevel(debugLoggingEnabled ? 'v' : 'warn');
       }
-      await currentPlayer.setProperty('hwdec', _getHwdecValue(enableHardwareDecoding));
+      await setAppDefault('hwdec', _getHwdecValue(enableHardwareDecoding));
 
       // Deinterlacing (#2149) is mpv-only by design — ExoPlayer has no filter
       // chain. `auto` deinterlaces only content flagged interlaced. Wrapped:
@@ -1707,7 +1719,7 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
       // that rejects `auto` just keeps its default).
       if (!(Platform.isAndroid && useExoPlayer) && settingsService.read(SettingsService.deinterlace)) {
         try {
-          await currentPlayer.setProperty('deinterlace', 'auto');
+          await setAppDefault('deinterlace', 'auto');
         } catch (e) {
           appLogger.w('VideoPlayerScreen: deinterlace not applied', error: e);
         }
@@ -1721,44 +1733,32 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
       // whatever is left is a logged warning with mpv keeping its own
       // default styling.
       try {
-        await currentPlayer.setProperty(
-          'sub-font-size',
-          settingsService.read(SettingsService.subtitleFontSize).toString(),
-        );
-        await currentPlayer.setProperty(
+        await setAppDefault('sub-font-size', settingsService.read(SettingsService.subtitleFontSize).toString());
+        await setAppDefault(
           'sub-color',
           _sanitizedSubtitleColor(
             settingsService.read(SettingsService.subtitleTextColor),
             SettingsService.subtitleTextColor.defaultValue,
           ),
         );
-        await currentPlayer.setProperty(
-          'sub-border-size',
-          settingsService.read(SettingsService.subtitleBorderSize).toString(),
-        );
-        await currentPlayer.setProperty(
+        await setAppDefault('sub-border-size', settingsService.read(SettingsService.subtitleBorderSize).toString());
+        await setAppDefault(
           'sub-border-color',
           _sanitizedSubtitleColor(
             settingsService.read(SettingsService.subtitleBorderColor),
             SettingsService.subtitleBorderColor.defaultValue,
           ),
         );
-        await currentPlayer.setProperty('sub-bold', settingsService.read(SettingsService.subtitleBold) ? 'yes' : 'no');
-        await currentPlayer.setProperty(
-          'sub-italic',
-          settingsService.read(SettingsService.subtitleItalic) ? 'yes' : 'no',
-        );
+        await setAppDefault('sub-bold', settingsService.read(SettingsService.subtitleBold) ? 'yes' : 'no');
+        await setAppDefault('sub-italic', settingsService.read(SettingsService.subtitleItalic) ? 'yes' : 'no');
         final bgOpacity = (settingsService.read(SettingsService.subtitleBackgroundOpacity) * 255 / 100).toInt();
         final bgColor = _sanitizedSubtitleColor(
           settingsService.read(SettingsService.subtitleBackgroundColor),
           SettingsService.subtitleBackgroundColor.defaultValue,
         ).replaceFirst('#', '');
-        await currentPlayer.setProperty(
-          'sub-back-color',
-          '#${bgOpacity.toRadixString(16).padLeft(2, '0').toUpperCase()}$bgColor',
-        );
+        await setAppDefault('sub-back-color', '#${bgOpacity.toRadixString(16).padLeft(2, '0').toUpperCase()}$bgColor');
         if (settingsService.read(SettingsService.subtitleBackgroundOpacity) > 0) {
-          await currentPlayer.setProperty('sub-border-style', 'background-box');
+          await setAppDefault('sub-border-style', 'background-box');
         }
       } catch (e) {
         appLogger.w('VideoPlayerScreen: subtitle styling not applied', error: e);
@@ -1775,17 +1775,17 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
         ('sub-pos', settingsService.read(SettingsService.subtitlePosition).toString()),
       ]) {
         try {
-          await currentPlayer.setProperty(name, value);
+          await setAppDefault(name, value);
         } catch (e) {
           appLogger.w('VideoPlayerScreen: $name not applied', error: e);
         }
       }
 
       // Placement policy is MPV-only and independent of ASS styling. Keep the
-      // last accepted/default value on refusal; custom mpv.conf still wins below.
+      // last accepted/default value on refusal; an mpv.conf setting is never written over.
       if (!(Platform.isAndroid && useExoPlayer)) {
         try {
-          await currentPlayer.setProperty(
+          await setAppDefault(
             'sub-use-margins',
             settingsService.read(SettingsService.subtitleUseMargins) ? 'yes' : 'no',
           );
@@ -1927,7 +1927,7 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
       }
 
       if (PlatformDetector.isDesktopOS()) {
-        await currentPlayer.setProperty('screenshot-directory', '~/Pictures');
+        await setAppDefault('screenshot-directory', '~/Pictures');
       }
 
       // Where libmpv read the config itself (MpvConfigFile), it has already
@@ -1976,7 +1976,7 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen>
 
       final maxVolume = settingsService.read(SettingsService.maxVolume);
       try {
-        await currentPlayer.setProperty('volume-max', maxVolume.toString());
+        await setAppDefault('volume-max', maxVolume.toString());
       } catch (e) {
         appLogger.w('VideoPlayerScreen: volume-max not applied', error: e);
       }

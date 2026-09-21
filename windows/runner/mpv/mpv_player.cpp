@@ -623,8 +623,9 @@ bool MpvPlayer::Initialize(HWND view) {
     }
   }
 
-  // Default to warn-level logging; Dart side can raise to "v" if debug logging is enabled.
-  mpv_request_log_messages(mpv_, "warn");
+  // Default to warn-level logging. With debug logging the Dart side asks for
+  // "v" already here, so the config directory read below is logged too.
+  mpv_request_log_messages(mpv_, initial_log_level_.empty() ? "warn" : initial_log_level_.c_str());
 
   // The user's config last, so it is the final word on everything the app did
   // not reserve for itself (the Dart side comments those lines out before it

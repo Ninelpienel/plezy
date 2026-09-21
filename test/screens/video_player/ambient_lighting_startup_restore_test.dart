@@ -197,12 +197,14 @@ void main() {
           ).push(navigator.currentState!),
         );
 
-        // The start flow applies the saved shader preset (a chain clear) in
-        // the same hook that used to restore ambient lighting; once it has
-        // landed, any restore attempted there has already read null geometry.
+        // The start flow applies the saved shader preset in the same hook that
+        // used to restore ambient lighting, ahead of the load. With no preset
+        // that sends nothing (the user's own mpv.conf shaders are never
+        // cleared), so the load is the marker: once it has been issued, any
+        // restore attempted in that hook has already read null geometry.
         await pumpUntil(
           tester,
-          () => shaderCommands.any((args) => args[2] == 'clr'),
+          () => loadfiles > 0,
           describe: () => 'loadfiles=$loadfiles shaderCommands=$shaderCommands',
         );
         await tester.pump();

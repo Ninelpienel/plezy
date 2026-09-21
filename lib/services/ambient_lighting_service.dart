@@ -84,8 +84,15 @@ class AmbientLightingService {
     }
   }
 
+  /// Take the ambient lighting shader out of the chain, ahead of a
+  /// ShaderService rebuild that [reappendShader] ends, so it stays last.
+  Future<void> detachShader() async {
+    if (!_enabled || _shaderPath == null) return;
+    await _player.command(['change-list', 'glsl-shaders', 'remove', _shaderPath!]);
+  }
+
   /// Re-append the ambient lighting shader to the chain.
-  /// Called by ShaderService after it rebuilds the shader chain (clr + append).
+  /// Called by ShaderService after it rebuilds its part of the chain.
   Future<void> reappendShader() async {
     if (!_enabled || _shaderPath == null) return;
     await _player.command(['change-list', 'glsl-shaders', 'append', _shaderPath!]);

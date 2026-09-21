@@ -9,6 +9,8 @@ import 'package:plezy/focus/input_mode_tracker.dart';
 import 'package:plezy/focus/key_event_utils.dart';
 import 'package:plezy/i18n/strings.g.dart';
 import 'package:plezy/models/mpv_config_models.dart';
+import 'package:plezy/screens/settings/mpv_config_line_editor.dart';
+import 'package:plezy/screens/settings/mpv_config_line_numbers.dart';
 import 'package:plezy/screens/settings/mpv_config_screen.dart';
 import 'package:plezy/services/base_shared_preferences_service.dart';
 import 'package:plezy/services/settings_service.dart';
@@ -255,16 +257,36 @@ void main() {
     expect(tester.widget<TextField>(find.byType(TextField)).controller!.text, 'external=yes');
     expect(backend.durableConfig, 'external=yes');
   });
+  // The HTPC view (and Force TV mode) put a PC in the TV layout, but it still
+  // has a keyboard: profiles need the free multiline field there.
+  testWidgets('a desktop in the TV layout keeps the free text field with line numbers', (tester) async {
+    await TvDetectionService.getInstance(forceTv: true);
+    TvDetectionService.setForceTVSync(true);
+    PlatformDetector.debugSetIsDesktopOSOverride(true);
+    addTearDown(() {
+      TvDetectionService.setForceTVSync(false);
+      PlatformDetector.debugSetIsDesktopOSOverride(null);
+    });
+
+    await _pumpEditor(tester, initialConfig: '[Deband]\nprofile-cond=true\ndeband=yes');
+
+    expect(find.byType(MpvConfigLineEditor), findsNothing);
+    expect(find.byType(MpvConfigLineNumbers), findsOneWidget);
+  });
+
   group('TV line editor', () {
     setUp(() async {
       TvDetectionService.debugSetAppleTVOverride(null);
       await TvDetectionService.getInstance(forceTv: true);
       TvDetectionService.setForceTVSync(true);
+      // A real TV: a desktop in the TV layout keeps the free text field.
+      PlatformDetector.debugSetIsDesktopOSOverride(false);
     });
 
     tearDown(() {
       TvDetectionService.debugSetAppleTVOverride(null);
       TvDetectionService.setForceTVSync(false);
+      PlatformDetector.debugSetIsDesktopOSOverride(null);
     });
 
     testWidgets('renders one row per line and persists edits joined by newlines', (tester) async {

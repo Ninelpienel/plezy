@@ -51,6 +51,12 @@ class MpvPlayer {
   // Empty keeps libmpv's default of no config at all.
   void SetConfigDir(std::string config_dir) { config_dir_ = std::move(config_dir); }
 
+  // Log level requested before mpv_initialize. mpv reports reading the config
+  // directory - options, profiles - at "v" while initializing, so a level
+  // raised afterwards through SetLogLevel misses all of it. Must be set before
+  // Initialize; empty keeps the default of "warn".
+  void SetInitialLogLevel(std::string level) { initial_log_level_ = std::move(level); }
+
   // Disposes mpv and the video window.
   void Dispose();
 
@@ -123,6 +129,7 @@ class MpvPlayer {
 
   const bool audio_only_;
   std::string config_dir_;
+  std::string initial_log_level_;
   mpv_handle* mpv_ = nullptr;
   HWND hwnd_ = nullptr;
   HWND forward_target_view_ = nullptr;

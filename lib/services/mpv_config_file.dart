@@ -5,6 +5,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../mpv/mpv_input_bindings.dart';
+import '../mpv/player/player.dart';
 import '../utils/app_logger.dart';
 import 'settings_service.dart';
 
@@ -123,6 +124,47 @@ abstract final class MpvConfigFile {
       }
     }
     return out.join('\n');
+  }
+
+  /// Lines inside a profile that describe the profile rather than set an
+  /// option mpv keeps as a property.
+  static const _profileBookkeeping = {'profile', 'profile-cond', 'profile-restore', 'profile-desc'};
+
+  /// Option aliases whose value mpv keeps under another property name.
+  static const _propertyForAlias = {'glsl-shader': 'glsl-shaders'};
+
+  /// The properties the config [text] sets, in file order, each once, with
+  /// aliases resolved - what to read back to see what is in effect.
+  static List<String> propertiesSetBy(String text) {
+    final names = <String>{};
+    for (final line in text.split('\n')) {
+      final option = _optionName(line);
+      if (option == null || _profileBookkeeping.contains(option)) continue;
+      names.add(_propertyForAlias[option] ?? option);
+    }
+    return names.toList();
+  }
+
+  /// Writes the values mpv is actually using for every property the user's
+  /// config sets, as one info line.
+  ///
+  /// mpv reports reading the config only at "v", and an auto profile that
+  /// applies later only at "info" in a Lua script's own log - neither is in a
+  /// default log. The values after the first frame show both at once: a
+  /// `deband=yes` next to `deband=no` in the file is the [Deband] profile at
+  /// work, an empty `glsl-shaders` a shader that did not load.
+  static Future<void> logEffectiveValues(Player player, String text) async {
+    final properties = propertiesSetBy(text);
+    if (properties.isEmpty) return;
+    final values = <String>[];
+    for (final name in properties) {
+      try {
+        values.add('$name=${await player.getProperty(name) ?? '?'}');
+      } catch (_) {
+        values.add('$name=?');
+      }
+    }
+    appLogger.i('mpv.conf in effect after the first frame: ${values.join(', ')}');
   }
 
   /// Whether any line of the config [text] sets [option], inside a profile or

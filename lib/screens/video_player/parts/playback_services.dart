@@ -76,6 +76,11 @@ extension _VideoPlayerPlaybackServiceMethods on VideoPlayerScreenState {
     if (stale()) return;
 
     _firstFrame.markReady();
+    // What mpv.conf actually did, for the log: the config is read where no
+    // default log level sees it, and auto profiles apply silently.
+    if (currentPlayer.playerType == 'mpv') {
+      unawaited(MpvConfigFile.logEffectiveValues(currentPlayer, settingsService.read(SettingsService.mpvConfigText)));
+    }
     // This request is proven: a later in-place switch that fails restores it.
     _workingOpenRequest = _currentOpenRequest;
     _http503Watchdog.disarm();

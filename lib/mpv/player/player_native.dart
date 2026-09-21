@@ -276,6 +276,10 @@ class PlayerNative extends PlayerBase implements MpvInputBindingsSource {
               .read(SettingsService.subtitleRenderResolution)
               .androidRenderScale,
         if (Platform.isAndroid) 'logLevel': _requestedLogLevel,
+        // The desktop cores read the config directory inside mpv_initialize and
+        // report it at "v" only, so debug logging has to ask for "v" before
+        // that, not in the setLogLevel that follows initialization.
+        if (configDir != null && !Platform.isAndroid && debugLoggingEnabled) 'logLevel': 'v',
         'instanceId': nativeInstanceId,
       });
       if (result != true) {
