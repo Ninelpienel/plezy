@@ -125,6 +125,10 @@ abstract final class MpvConfigFile {
     return out.join('\n');
   }
 
+  /// Whether any line of the config [text] sets [option], inside a profile or
+  /// not, in either spelling.
+  static bool setsOption(String text, String option) => text.split('\n').any((line) => _optionName(line) == option);
+
   /// The option a config line sets, or null for comments, blank lines,
   /// `[profile]` headers and anything else that is not an assignment.
   static String? _optionName(String line) {
